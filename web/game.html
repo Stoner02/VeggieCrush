@@ -1,0 +1,167 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+	<title>Veggie Crush</title>
+
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+	<script type="text/javascript" src="js/boot.js"></script>
+	<script type="text/javascript" src="js/preload.js"></script>
+	<script type="text/javascript" src="js/gametitle.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/gameover.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript">
+		(function() {
+
+			game = new Phaser.Game('100', '125', Phaser.AUTO, 'game-container');
+
+			//Add all states
+			//Adds a new State into the StateManager
+			game.state.add("Boot", Boot);
+			game.state.add("Preload", Preload);
+			game.state.add("GameTitle", GameTitle);
+			game.state.add("Main", Main);
+			game.state.add("GameOver", GameOver);
+
+			//Start the first state
+			game.state.start("Boot");
+
+		})();
+	</script>	
+</head>
+
+<body> 
+
+	<table id="plateauJeu">
+		<tr>
+			<!-- *********************** -->
+			<!-- Left -->
+			<!-- *********************** -->
+			<td> 
+				
+				<!-- *********************** -->
+				<!-- Bonus -->
+				<!-- *********************** -->
+				<div id="bonus">
+					<h2>Bonus: <span id="bonusVal"></span></h2>
+				</div>
+
+				<!-- *********************** -->
+				<!-- Argent -->
+				<!-- *********************** -->
+				<div id="money">
+					<h2>Argent: <span id="moneyVal">52</span></h2>
+				</div>
+
+				<!-- *********************** -->
+				<!-- Experience -->
+				<!-- *********************** -->
+				<div id="exp">
+					<h2>Expérience: <span id="expVal">2500014</span></h2>
+				</div>
+
+				<!-- *********************** -->
+				<!-- Ingrédients -->
+				<!-- *********************** -->
+				<div id="ingredient">
+					<h2>Ingrédients: <span id="ingreVal"></span></h2>
+				</div>
+
+				<!-- *********************** -->
+				<!-- Potions -->
+				<!-- *********************** -->
+				<table id="potions">
+					<!-- Headers -->
+					<th>
+						<td>RTS</td> <td>FarmVille</td> <td>MMO</td>
+					</th>
+					<!-- Potions -->
+					<tr>
+						<td>Potion1: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+					</tr>
+					<tr>
+						<td>Potion2: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+					</tr>
+					<tr>
+						<td>Potion3: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+					</tr>
+					<tr>
+						<td>Potion4: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+					</tr>
+				</table>
+
+
+
+			</td>
+			<!-- *********************** -->
+			<!-- Middle -->
+			<!-- *********************** -->
+			<td> 
+				<div id="game-container"></div>
+				
+				<div id="message"><p>Vous venez de vendre une potion du chat.</p></div>
+			</td>
+			<!-- *********************** -->
+			<!-- Right -->
+			<!-- *********************** -->
+			<td> 
+
+				<!-- *********************** -->
+				<!-- Vous êtes ici -->
+				<!-- *********************** -->
+				<div id="position">
+					<h2>Vous êtes ici: <span id="valPosition"></span></h2>
+				</div>
+
+				<!-- *********************** -->
+				<!-- Coordonnées -->
+				<!-- *********************** -->
+				<form action="/lol.php" id="coord">
+					<h2>Coordonnées</h2>
+					X:
+					<input type="text" name="xCoord" value="">
+					Y:
+					<input type="text" name="yCoord" value="">
+					<input type="submit" value="Go">
+				</form> 
+
+
+				<!-- *********************** -->
+				<!-- Villages -->
+				<!-- *********************** -->
+				<form action="/lol.php" id="village">
+					<h2>Villages</h2>
+					<select name="village" size="4">
+						<option value="volvo">Volvo</option>
+						<option value="saab">Saab</option>
+						<option value="fiat">Fiat</option>
+						<option value="audi">Audi</option>
+					</select>
+					<input type="submit" value="Go">
+				</form>
+
+
+				<!-- *********************** -->
+				<!-- BG -->
+				<!-- *********************** -->
+				<form action="/lol.php" id="bg">
+					<h2>Champ de bataille</h2>
+					<select name="bg" size="4">
+						<option value="volvo">Volvo</option>
+						<option value="saab">Saab</option>
+						<option value="fiat">Fiat</option>
+						<option value="audi">Audi</option>
+					</select>
+					<input type="submit" value="Go">
+				</form>
+				
+			</td>
+		</tr>
+	</table>
+
+
+</body>
+
+</html>
