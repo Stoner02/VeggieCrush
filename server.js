@@ -9,7 +9,7 @@ var express = require('express'),
 	LocalStrategy = require('passport-local').Strategy; //for authenticating with a username and password
 	bodyParser = require('body-parser');
 
-// mongoose instance connection url connection
+// mongoose instance connection url connection test
 mongoose.connect('mongodb://localhost/distdb');
 
 app.use(bodyParser.urlencoded({ extended: true }));
