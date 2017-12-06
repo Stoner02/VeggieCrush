@@ -86,16 +86,16 @@
 					</th>
 					<!-- Potions -->
 					<tr>
-						<td>Potion1: </td> <td>10 </td> <td>4 </td> <td>47</td>
+						<td>Potion1: </td> <td id="rts1"> </td> <td id="ville1"> </td> <td id="mmo1"> </td>
 					</tr>
 					<tr>
-						<td>Potion2: </td> <td>10 </td> <td>4 </td> <td>47</td>
+						<td>Potion2: </td> <td id="rts2"> </td> <td id="ville2"> </td> <td id="mmo2"> </td>
 					</tr>
 					<tr>
-						<td>Potion3: </td> <td>10 </td> <td>4 </td> <td>47</td>
+						<td>Potion3: </td> <td id="rts3"> </td> <td id="ville3"> </td> <td id="mmo3"> </td>
 					</tr>
 					<tr>
-						<td>Potion4: </td> <td>10 </td> <td>4 </td> <td>47</td>
+						<td>Potion4: </td> <td id="rts4"> </td> <td id="ville4"> </td> <td id="mmo4"> </td>
 					</tr>
 				</table>
 
@@ -182,6 +182,30 @@
 		var mdp = "123" 		//TODO recup du cookie
 		socket.emit('connectTry', pseudo, mdp);
 		
+		//-------------------------------------
+		// Récupérer toutes les potions
+		//-------------------------------------
+		socket.emit('getAllPopo');
+
+		//-------------------------------------
+		// Met à jour toutes les potions
+		//-------------------------------------
+		socket.on('receiveAllPopo', function (data) {
+			document.getElementById("mmo1").innerHTML = data.mmo1;
+			document.getElementById("mmo2").innerHTML = data.mmo2;
+			document.getElementById("mmo3").innerHTML = data.mmo3;
+			document.getElementById("mmo4").innerHTML = data.mmo4;
+
+			document.getElementById("rts1").innerHTML = data.rts1;
+			document.getElementById("rts2").innerHTML = data.rts2;
+			document.getElementById("rts3").innerHTML = data.rts3;
+			document.getElementById("rts4").innerHTML = data.rts4;
+
+			document.getElementById("ville1").innerHTML = data.ville1;
+			document.getElementById("ville2").innerHTML = data.ville2;
+			document.getElementById("ville3").innerHTML = data.ville3;
+			document.getElementById("ville4").innerHTML = data.ville4;
+		});
 
 		//-------------------------------------
 		// disconnect client
