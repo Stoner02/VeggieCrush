@@ -128,6 +128,7 @@ io.sockets.on('connection', function (socket) {
 			{ connecte: state }, function (err, Av) { });
 	}
 
+
 	//----------------------------------------
 	// Disconnect the user
 	//----------------------------------------
@@ -137,10 +138,13 @@ io.sockets.on('connection', function (socket) {
 		socket.disconnect(0);
 	});
 
+
 	//----------------------------------------
 	// Send all potions
 	//----------------------------------------
-	socket.on('getAllPopo', function () {
+	socket.on('getAllPopo', getAllPopo);
+
+	function getAllPopo() {
 		console.log('getAllPopo');
 		Avatar.findOne({pseudo: pseudoSocket}, function(err, Av) {
 			if(Av != null){
@@ -163,82 +167,105 @@ io.sockets.on('connection', function (socket) {
 					mmo1: _mmo1, mmo2: _mmo2, mmo3: _mmo3, mmo4: _mmo4,
 					rts1: _rts1, rts2: _rts2, rts3: _rts3, rts4: _rts4,
 					ville1: _ville1, ville2: _ville2, ville3: _ville3, ville4: _ville4
-				})
+				});
 			}
 		});
-	});
+	}
 
+	//----------------------------------------
+	// Send money
+	//----------------------------------------
+	socket.on('getMoney', function () {
+		console.log('getMoney');
+		Avatar.findOne({pseudo: pseudoSocket}, function(err, Av) {
+			if(Av != null){
+				socket.emit("updateMoney", {argent: Av.argent});
+			}
+		});
+	})
 
 	socket.on('addPotionMMO1', function () {
-		console.log('ajout potion' + pseudoSocket);
+		console.log('ajout potion MMO');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO1: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionMMO1: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionMMO2', function () {
-		console.log('ajout potion');
+		console.log('ajout potion MMO');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO2: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionMMO2: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionMMO3', function () {
-		console.log('ajout potion');
+		console.log('ajout potion MMO');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO3: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionMMO3: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionMMO4', function () {
-		console.log('ajout potion');
+		console.log('ajout potion MMO');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO4: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionMMO4: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionRTS1', function () {
-		console.log('ajout potion');
+		console.log('ajout potion RTS');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO1: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionRTS1: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionRTS2', function () {
-		console.log('ajout potion');
+		console.log('ajout potion RTS');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO2: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionRTS2: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionRTS3', function () {
-		console.log('ajout potion');
+		console.log('ajout potion RTS');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO3: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionRTS3: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionRTS4', function () {
-		console.log('ajout potion');
+		console.log('ajout potion RTS');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO4: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionRTS4: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionVille1', function () {
-		console.log('ajout potion');
+		console.log('ajout potion ville');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO1: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionVille1: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionVille2', function () {
-		console.log('ajout potion');
+		console.log('ajout potion ville');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO2: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionVille2: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionVille3', function () {
-		console.log('ajout potion');
+		console.log('ajout potion ville');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO3: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionVille3: 1 } }, { new: true }, function (err, Av) {});
+			getAllPopo();
 	});
 
 	socket.on('addPotionVille4', function () {
-		console.log('ajout potion');
+		console.log('ajout potion ville');
 		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{ $inc: { potionMMO4: 1 } }, { new: true }, function (err, Av) { });
+			{ $inc: { potionVille4: 1 } }, { new: true }, function (err, Av) {;});
+			getAllPopo();
 	});
 
 	socket.on('changeCoord', function (x, y) {

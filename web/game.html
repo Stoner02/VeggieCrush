@@ -59,14 +59,14 @@
 				<!-- Argent -->
 				<!-- *********************** -->
 				<div id="money">
-					<h2>Argent: <span id="moneyVal">52</span></h2>
+					<h2>Argent: <span id="moneyVal"></span></h2>
 				</div>
 
 				<!-- *********************** -->
 				<!-- Experience -->
 				<!-- *********************** -->
 				<div id="exp">
-					<h2>Expérience: <span id="expVal">2500014</span></h2>
+					<h2>Expérience: <span id="expVal"></span></h2>
 				</div>
 
 				<!-- *********************** -->
@@ -186,11 +186,15 @@
 		// Récupérer toutes les potions
 		//-------------------------------------
 		socket.emit('getAllPopo');
+		//-------------------------------------
+		// Récupérer l'argent/exp
+		//-------------------------------------
+		socket.emit('getMoney');
 
 		//-------------------------------------
 		// Met à jour toutes les potions
 		//-------------------------------------
-		socket.on('receiveAllPopo', function (data) {
+	socket.on('receiveAllPopo', function (data) {
 			document.getElementById("mmo1").innerHTML = data.mmo1;
 			document.getElementById("mmo2").innerHTML = data.mmo2;
 			document.getElementById("mmo3").innerHTML = data.mmo3;
@@ -207,12 +211,21 @@
 			document.getElementById("ville4").innerHTML = data.ville4;
 		});
 
+
+		//-------------------------------------
+		// Met à jour l'argent et l'exp
+		//-------------------------------------
+		socket.on('updateMoney', function (data) {
+			document.getElementById("moneyVal").innerHTML = data.argent;
+			document.getElementById("expVal").innerHTML = data.argent;
+		});
+
 		//-------------------------------------
 		// disconnect client
 		//-------------------------------------
 		function disconnect() {
-			console.log("check");
 			socket.emit('userDisconnect');
+			window.location = "index.html";
 		} 
 	
 
@@ -229,6 +242,7 @@
 		socket.on('erreurConnexion', function (data) {
 			console.log("Erreur connexion.");
 		});
+
 	</script>
 
 

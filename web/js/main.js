@@ -458,14 +458,16 @@ Main.prototype = {
 
 		document.getElementById("ingreVal").innerHTML = "0";
 	},
-	
+
 	incrementScore: function(){
 	
 		var me = this;
-	
 		me.score += 10;  
-		document.getElementById("ingreVal").innerHTML = me.score;    
-	
+		if(me.score >= 100){
+			me.score -= 100;  
+			createPopo();
+		}  
+		document.getElementById("ingreVal").innerHTML = me.score;  
 	},
 
 	gameOver: function(){
@@ -473,6 +475,13 @@ Main.prototype = {
 	}
 
 
-	
+};
 
+function createPopo(){ console.log("ohoh ?");
+	var array = ['addPotionMMO1', 'addPotionMMO2', 'addPotionMMO3', 'addPotionMMO4',
+				'addPotionRTS1', 'addPotionRTS2', 'addPotionRTS3', 'addPotionRTS4',
+				'addPotionVille1', 'addPotionVille2', 'addPotionVille3', 'addPotionVille4'];
+	var index = Math.floor((Math.random() * array.length) + 0);	
+	console.log("CREATION " + array[index]);
+	socket.emit(array[index]);		
 };
