@@ -30,7 +30,8 @@ console.log('todo list RESTful API server started on: ' + port);
 var http = require('http');
 var connect = require('connect');
 var serveStatic = require('serve-static');
-var app2 = connect().use(serveStatic(__dirname + '/web/')).listen(8080, function () {
+var app2Func = connect().use(serveStatic(__dirname + '/web/'));
+var app2 = app2Func.listen(8080, function () {
 	console.log('Server running on 8080...');
 });
 
@@ -52,7 +53,7 @@ io.sockets.on('connection', function (socket) {
 	var bonusVillage3 = 0;
 	var bonusVillage4 = 0;
 	var malusRTS = 0;
-	var connecte = 0;
+	var connecte = false;
 
 	/*
 	function showPseudo() {
@@ -86,14 +87,12 @@ io.sockets.on('connection', function (socket) {
 				new_avatar.potionMMO3 = 50;
 				new_avatar.potionMMO4 = 50;
 				new_avatar.experience = 0;
-				new_avatar.connecte = true;
+				new_avatar.connecte = false;
 
 				new_avatar.save(function (err, Av) {
 					if (err) {
 					} else {
-						socket.emit('inscritOk');
-						var html = require('fs').readFileSync(__dirname + '/alchimist_login/login2.html');
-						client.emit('redirect', destination);
+						socket.emit('inscritOk'); 
 					}
 				});
 			} else {
@@ -101,6 +100,7 @@ io.sockets.on('connection', function (socket) {
 			}
 		});
 	});
+
 
 	socket.on('connectTry', function (pseudo, mdp) {
 
@@ -111,21 +111,32 @@ io.sockets.on('connection', function (socket) {
 				socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
 				console.log("Erreur connexion.")
 			} else {
-				if (Av.connecte == true) {
-					socket.emit('erreurConnexion', 'Vous êtes déjà connecté');
-				} else {
-					pseudoSocket = pseudo;
-					socket.emit('connecte');
-				}
-
+				pseudoSocket = pseudo;
+				connecte = true;
+				connectionState(connecte);
+				socket.emit('connecte');		
 			}
 		});
 	});
 
-	socket.on('disconnect', function () {
+
+	//----------------------------------------
+	// Change connecte state of the user
+	//----------------------------------------
+	function connectionState(state){
+		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+			{ connecte: state }, function (err, Av) { });
+	}
+
+	//----------------------------------------
+	// Disconnect the user
+	//----------------------------------------
+	socket.on('userDisconnect', function () {
 		console.log('disconnect: ' + pseudoSocket);
+		connectionState(false);
 		socket.disconnect(0);
 	});
+
 
 	socket.on('addPotionMMO1', function () {
 		console.log('ajout potion' + pseudoSocket);

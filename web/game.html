@@ -42,6 +42,13 @@
 			<td> 
 				
 				<!-- *********************** -->
+				<!-- Disconnect button -->
+				<!-- *********************** -->
+				<div id="disconnect">
+					<button onclick="disconnect()">Disconnect</button>
+				</div>
+
+				<!-- *********************** -->
 				<!-- Bonus -->
 				<!-- *********************** -->
 				<div id="bonus">
@@ -79,16 +86,16 @@
 					</th>
 					<!-- Potions -->
 					<tr>
-						<td>Potion1: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+						<td>Potion1: </td> <td>10 </td> <td>4 </td> <td>47</td>
 					</tr>
 					<tr>
-						<td>Potion2: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+						<td>Potion2: </td> <td>10 </td> <td>4 </td> <td>47</td>
 					</tr>
 					<tr>
-						<td>Potion3: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+						<td>Potion3: </td> <td>10 </td> <td>4 </td> <td>47</td>
 					</tr>
 					<tr>
-						<td>Potion4: </td> <td>10 </td> <td>4 </td> <td>47</td> <td>12</td>
+						<td>Potion4: </td> <td>10 </td> <td>4 </td> <td>47</td>
 					</tr>
 				</table>
 
@@ -160,6 +167,45 @@
 			</td>
 		</tr>
 	</table>
+
+
+	<!-- BEGIN JAVASCRIPT -->
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js'></script>
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js'></script>
+	<script type="text/javascript" src="js/node_modules/socket.io-client/dist/socket.io.js"></script>
+	<script type="text/javascript">
+
+		var socket = io.connect();
+
+		var pseudo = "STONER" 	//TODO recup du cookie
+		var mdp = "123" 		//TODO recup du cookie
+		socket.emit('connectTry', pseudo, mdp);
+		
+
+		//-------------------------------------
+		// disconnect client
+		//-------------------------------------
+		function disconnect() {
+			console.log("check");
+			socket.emit('userDisconnect');
+		} 
+	
+
+		//-------------------------------------
+		// Connexion réussie
+		//-------------------------------------
+		socket.on('connecte', function (data) {
+			console.log("Connecte.");
+		});
+
+		//-------------------------------------
+		// Précise l'erreur de connexion
+		//-------------------------------------
+		socket.on('erreurConnexion', function (data) {
+			console.log("Erreur connexion.");
+		});
+	</script>
 
 
 </body>

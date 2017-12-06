@@ -3,13 +3,6 @@ module.exports = function(app) {
 	
 	var avatar = require('../controllers/avatarController');
 
-	/*
-	// -----------------------------------
-	// Secure game access
-	// -----------------------------------
-	app.route('/game')
-		.get(checkActiveSession) */
-
 	// -----------------------------------
 	// avatar Routes
 	// -----------------------------------

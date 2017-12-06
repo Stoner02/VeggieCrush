@@ -34,20 +34,25 @@
           </div>
         </div>
         <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">lock_outline</i>
+              <input class="validate" id="passwordConfirmation" type="password" name="password">
+              <label for="password">Password confirmation</label>
+            </div>
+          </div>
+        <div class="row">
         </div>
         <div class="row">
           <div class="input-field col s12">
 
-            <button type="submit" href="#" class="btn waves-effect waves-light col s12" onclick="connexion()">Login</button>
+            <button type="submit" href="#" class="btn waves-effect waves-light col s12" onclick="subscribe()">Subscribe</button>
 
           </div>
 
         <div class="row">
          <div class="input-field col s6 m6 l6">
-           <p class="margin medium-small"><a href="subscribe.html">Register Now!</a></p>
          </div>
          <div class="input-field col s6 m6 l6">
-             
          </div>
        </div>
      </div>
@@ -66,28 +71,37 @@
 <script type="text/javascript">
   var socket = io.connect();
 
-  //-------------------------------------
-  // Connexion réussie, redirection sur la page du jeu
-  //-------------------------------------
-	socket.on('connecte', function (data) {
-    window.location = "game.html";
-  });
+    //-------------------------------------
+    // Envoie le pseudo et le mdp du form à connectTry
+    //-------------------------------------
+    socket.on('pseudoPris', function () {
+        alert('Pseudo déjà pris!');
+    });
 
-  //-------------------------------------
-  // Précise l'erreur de connexion
-  //-------------------------------------
-	socket.on('erreurConnexion', function (data) {
-    alert(data);
-  });
-  
-  //-------------------------------------
-  // Envoie le pseudo et le mdp du form à connectTry
-  //-------------------------------------
-	function connexion() {
-    var pseudo = document.getElementById("email").value;
-    var mdp = document.getElementById("password").value;
-    socket.emit('connectTry', pseudo, mdp);
-  } 
+    //-------------------------------------
+    // Inscription OK
+    //-------------------------------------
+	socket.on('inscritOk', function (data) {
+    window.location = "index.html";
+    });
+
+
+    //-------------------------------------
+    // Envoie le pseudo et le mdp du form à inscription
+    //-------------------------------------
+	function subscribe() {
+        var pseudo = document.getElementById("email").value;
+        var mdp = document.getElementById("password").value;
+        var mdpConfirmation = document.getElementById("passwordConfirmation").value;
+
+        if(mdp === mdpConfirmation){
+            socket.emit('inscription', pseudo, mdp);        
+        }
+        else{
+            alert("Erreur dans la confirmation du mot de passe.")
+        }
+        
+    } 
 
 
 </script>

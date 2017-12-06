@@ -9,6 +9,7 @@ var argentDepart 	= 1000;
 var moment 				= require('moment');
 var timezone 			= require('moment-timezone');
 
+
 var Prix = {
 	potionRTS1 : 1000,
 	potionRTS2 : 500,
@@ -410,12 +411,11 @@ exports.check_login = function(req, res){
 				res.status(404).json('Introuvable');
 			}else{
 				res.status(200).json('Trouve');
+
 			}
 		});	
-
+		
 }
-
-
 
 
 
