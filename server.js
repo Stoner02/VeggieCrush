@@ -86,7 +86,7 @@ io.sockets.on('connection', function (socket) {
 				new_avatar.potionMMO2 = 50;
 				new_avatar.potionMMO3 = 50;
 				new_avatar.potionMMO4 = 50;
-				new_avatar.experience = argentDepart;
+				new_avatar.experience = 0;
 				new_avatar.connecte = false;
 
 				new_avatar.save(function (err, Av) {
@@ -176,29 +176,18 @@ io.sockets.on('connection', function (socket) {
 	//----------------------------------------
 	// Send money
 	//----------------------------------------
-	socket.on('getMoney', function () {
-		console.log('getMoney');
-		updateMoney();
+	socket.on('getMoneyExp', function () {
+		console.log('getMoneyExp');
+		updateMoneyExp();
 	})
 
-	function updateMoney(){
+	function updateMoneyExp(){
 		Avatar.findOne({pseudo: pseudoSocket}, function(err, Av) {
 			if(Av != null){
-				socket.emit("updateExperienceArgent", {argent: Av.argent});
+				socket.emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience});
 			}
 		});
 	}
-
-	function updateExperienceArgent(_experience){
-
-		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
-			{experience: _experience}, function (err, Av) { 
-				if(Av != null){
-					socket.emit("updateExperienceArgent", {experience: _experience});
-				}
-			});
-	}
-
 
 	//----------------------------------
 	// Update bonus

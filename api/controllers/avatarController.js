@@ -314,7 +314,9 @@ exports.buy_potion = function(req, res) {
 							argent: (new_transaction.potion1 * Prix.potionMMO1)+
 							(new_transaction.potion2 * Prix.potionMMO2)+
 							(new_transaction.potion3 * Prix.potionMMO3)+
-							(new_transaction.potion4 * Prix.potionMMO4)},$set: { dateArgent: moment() }},
+							(new_transaction.potion4 * Prix.potionMMO4),
+							experience: argent,},
+							$set: { dateArgent: moment() }},
 							{new: true}, function(err, Av) {
 								
 								if (err){
@@ -332,7 +334,7 @@ exports.buy_potion = function(req, res) {
 								  });	
 								}else{
 									res.status(200).json({ message: 'Transaction effectuée' });
-									updateExperienceArgent(argent);
+									socket.emit("updateArgentExp", {argent: argent, experience: experience});
 								}
 							});	
 	}else if(type == 'RTS'){
@@ -344,7 +346,9 @@ exports.buy_potion = function(req, res) {
 						argent: (new_transaction.potion1 * Prix.potionRTS1)+
 						(new_transaction.potion2 * Prix.potionRTS2)+
 						(new_transaction.potion3 * Prix.potionRTS3)+
-						(new_transaction.potion4 * Prix.potionRTS4)},$set: { dateArgent: moment() }},
+						(new_transaction.potion4 * Prix.potionRTS4),
+						experience: argent,},
+						$set: { dateArgent: moment() }},
 						{new: true}, function(err, Av) {
 							
 							if (err){
@@ -362,7 +366,7 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
-								updateExperienceArgent(argent);
+								socket.emit("updateArgentExp", {argent: argent, experience: experience});
 							}
 						  });	
 	}else if(type == 'VILLAGE'){
@@ -375,10 +379,8 @@ exports.buy_potion = function(req, res) {
 						(new_transaction.potion2 * Prix.potionVille2)+
 						(new_transaction.potion3 * Prix.potionVille3)+
 						(new_transaction.potion4 * Prix.potionVille4),
-						experience: (new_transaction.potion1 * Prix.potionVille1)+
-						(new_transaction.potion2 * Prix.potionVille2)+
-						(new_transaction.potion3 * Prix.potionVille3)+
-						(new_transaction.potion4 * Prix.potionVille4)},$set: { dateArgent: moment() }},
+						experience: argent,},
+						$set: { dateArgent: moment() }},
 						{new: true}, function(err, Av) {
 							
 							if (err){
@@ -396,7 +398,7 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
-								updateExperienceArgent(argent);
+								socket.emit("updateArgentExp", {argent: argent, experience: experience});
 							}
 						  });	
 	}else{
@@ -419,6 +421,5 @@ exports.check_login = function(req, res){
 		});	
 		
 }
-
 
 

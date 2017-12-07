@@ -182,7 +182,7 @@
 		//-------------------------------------
 		// Récupérer l'argent/exp
 		//-------------------------------------
-		socket.emit('getMoney');
+		socket.emit('getMoneyExp');
 		//-------------------------------------
 		// Récupérer la position du joueur
 		//-------------------------------------
@@ -292,10 +292,11 @@
 		//-------------------------------------
 		// Met à jour l'argent et l'exp
 		//-------------------------------------
-		socket.on('updateExperienceArgent', function (data) {
+		socket.on('updateArgentExp', function (data) {
 			document.getElementById("moneyVal").innerHTML = data.argent;
-			document.getElementById("expVal").innerHTML = data.argent;
+			document.getElementById("expVal").innerHTML = data.experience;
 		});
+
 
 		//-------------------------------------
 		// Met à jour le bonus
@@ -312,7 +313,6 @@
 			window.location = "index.html";
 		} 
 	
-
 		//-------------------------------------
 		// Connexion réussie
 		//-------------------------------------
@@ -326,8 +326,6 @@
 		socket.on('erreurConnexion', function (data) {
 			console.log("Erreur connexion.");
 		});
-
-
 
 	</script>
 
