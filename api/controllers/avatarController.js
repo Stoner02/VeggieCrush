@@ -332,6 +332,7 @@ exports.buy_potion = function(req, res) {
 								  });	
 								}else{
 									res.status(200).json({ message: 'Transaction effectuée' });
+									updateExperienceArgent(argent);
 								}
 							});	
 	}else if(type == 'RTS'){
@@ -361,6 +362,7 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
+								updateExperienceArgent(argent);
 							}
 						  });	
 	}else if(type == 'VILLAGE'){
@@ -394,6 +396,7 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
+								updateExperienceArgent(argent);
 							}
 						  });	
 	}else{

@@ -125,43 +125,36 @@
 				<!-- *********************** -->
 				<!-- Coordonnées -->
 				<!-- *********************** -->
-				<form action="/lol.php" id="coord">
+				<form id="coord">
 					<h2>Coordonnées</h2>
 					X:
-					<input type="text" name="xCoord" value="">
+					<input type="text" id="xCoord" value="">
 					Y:
-					<input type="text" name="yCoord" value="">
-					<input type="submit" value="Go">
+					<input type="text" id="yCoord" value="">
+					<input value="Go" onclick="changePosition()">
 				</form> 
 
 
 				<!-- *********************** -->
 				<!-- Villages -->
 				<!-- *********************** -->
-				<form action="/lol.php" id="village">
+				<form id="village">
 					<h2>Villages</h2>
-					<select name="village" size="4">
-						<option value="volvo">Volvo</option>
-						<option value="saab">Saab</option>
-						<option value="fiat">Fiat</option>
-						<option value="audi">Audi</option>
+					<select name="village" size="4" id="villageSelect">
+	
 					</select>
-					<input type="submit" value="Go">
+					<input value="Go" onclick="changeVillage()">
 				</form>
 
 
 				<!-- *********************** -->
 				<!-- BG -->
 				<!-- *********************** -->
-				<form action="/lol.php" id="bg">
+				<form  id="bg">
 					<h2>Champ de bataille</h2>
-					<select name="bg" size="4">
-						<option value="volvo">Volvo</option>
-						<option value="saab">Saab</option>
-						<option value="fiat">Fiat</option>
-						<option value="audi">Audi</option>
+					<select name="bg" size="4" id="bgSelect">
 					</select>
-					<input type="submit" value="Go">
+					<input value="Go" onclick="changeBg()">
 				</form>
 				
 			</td>
@@ -190,11 +183,31 @@
 		// Récupérer l'argent/exp
 		//-------------------------------------
 		socket.emit('getMoney');
+		//-------------------------------------
+		// Récupérer la position du joueur
+		//-------------------------------------
+		socket.emit('getCoord');
+		//-------------------------------------
+		// Récupérer tous les villages
+		//-------------------------------------
+		socket.emit('getVillages');
+		//-------------------------------------
+		// Récupérer tous les bg
+		//-------------------------------------
+		socket.emit('getBg');
+		
+		//-------------------------------------
+		// Met à jour les coordonnées
+		//-------------------------------------
+		socket.on('updateCoord', function (data) {
+			document.getElementById("xCoord").value.innerHTML = data.x;
+			document.getElementById("yCoord").value.innerHTML = data.y;
+		});
 
 		//-------------------------------------
 		// Met à jour toutes les potions
 		//-------------------------------------
-	socket.on('receiveAllPopo', function (data) {
+		socket.on('receiveAllPopo', function (data) {
 			document.getElementById("mmo1").innerHTML = data.mmo1;
 			document.getElementById("mmo2").innerHTML = data.mmo2;
 			document.getElementById("mmo3").innerHTML = data.mmo3;
@@ -211,13 +224,84 @@
 			document.getElementById("ville4").innerHTML = data.ville4;
 		});
 
+		//-------------------------------------
+		// Met à jour les villages
+		//-------------------------------------
+		socket.on('receiveVillages', function (data) {
+
+			var array = data.villages;
+			var villageSelect = document.getElementById('villageSelect');
+			villageSelect.innerHTML = "";
+
+			for(var i = 0; i < array.length; i++) {
+				var opt = document.createElement('option');
+				opt.innerHTML = array[i];
+				opt.value = array[i];
+				villageSelect.appendChild(opt);
+			}
+		});
+
+		//-------------------------------------
+		// Met à jour les bg
+		//-------------------------------------
+		socket.on('receiveBg', function (data) {
+
+			console.log("receiveBg");
+
+			var array = data.bg;
+			var bgSelect = document.getElementById('bgSelect');
+			bgSelect.innerHTML = "";
+
+			for(var i = 0; i < array.length; i++) {
+				var opt = document.createElement('option');
+				opt.innerHTML = array[i];
+				opt.value = array[i];
+				bgSelect.appendChild(opt);
+			}
+		});
+
+		//-------------------------------------
+		// Prévient changement position
+		//-------------------------------------
+		function changePosition(){
+			console.log("changePosition")
+			var x = document.getElementById("xCoord").value;
+			var y = document.getElementById("yCoord").value;
+			socket.emit("changePosition", {xCoord: x, yCoord: y});
+			document.getElementById("valPosition").innerHTML = "(" + x + ";" + y +")";
+		}
+
+		//-------------------------------------
+		// Prévient changement village
+		//-------------------------------------
+		function changeVillage(){
+			var villageSelected = $("#villageSelect option:selected").text();
+			socket.emit("updateVillage", {village: villageSelected});
+			document.getElementById("valPosition").innerHTML = villageSelected + " (Village)";
+		}
+
+		//-------------------------------------
+		// Prévient changement bg
+		//-------------------------------------
+		function changeBg(){
+			var bgSelected = $("#bgSelect option:selected").text();
+			socket.emit("updateBg", {bg: bgSelected});
+			document.getElementById("valPosition").innerHTML = bgSelected + " (BG)";
+		}
 
 		//-------------------------------------
 		// Met à jour l'argent et l'exp
 		//-------------------------------------
-		socket.on('updateMoney', function (data) {
+		socket.on('updateExperienceArgent', function (data) {
 			document.getElementById("moneyVal").innerHTML = data.argent;
 			document.getElementById("expVal").innerHTML = data.argent;
+		});
+
+		//-------------------------------------
+		// Met à jour le bonus
+		//-------------------------------------
+		socket.on('updateBonus', function (data) {
+			document.getElementById("bonusVal").innerHTML = data.bonus;
 		});
 
 		//-------------------------------------
@@ -242,6 +326,8 @@
 		socket.on('erreurConnexion', function (data) {
 			console.log("Erreur connexion.");
 		});
+
+
 
 	</script>
 
