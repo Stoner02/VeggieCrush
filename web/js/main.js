@@ -477,7 +477,7 @@ Main.prototype = {
 
 };
 
-function createPopo(){ console.log("ohoh ?");
+function createPopo(){
 	var array = ['addPotionMMO1', 'addPotionMMO2', 'addPotionMMO3', 'addPotionMMO4',
 				'addPotionRTS1', 'addPotionRTS2', 'addPotionRTS3', 'addPotionRTS4',
 				'addPotionVille1', 'addPotionVille2', 'addPotionVille3', 'addPotionVille4'];

@@ -43,8 +43,10 @@ var argentDepart = 1000;
 var moment = require('moment');
 var timezone = require('moment-timezone');
 
+module.exports.io = io;
+
 io.sockets.on('connection', function (socket) {
-	var pseudoSocket = 'zeroPseudo';
+	var pseudoSocket = 'STONER'; //todo Recup depuis la session
 	var coordSocketx = 0;
 	var coordSockety = 0;
 	var bonusHero = 0;
@@ -54,13 +56,8 @@ io.sockets.on('connection', function (socket) {
 	var bonusVillage4 = 0;
 	var malusRTS = 0;
 	var connecte = false;
-
-	/*
-	function showPseudo() {
-		console.log(pseudoSocket);
-	}
-	setInterval(showPseudo, 5000);
-	*/
+ 
+	socket.nickname = 'STONER'; //todo Recup depuis la session
 
 	socket.on('inscription', function (pseudo, mdp) {
 		console.log('INSCRIPTION' + pseudo + mdp);
@@ -111,7 +108,7 @@ io.sockets.on('connection', function (socket) {
 				socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
 				console.log("Erreur connexion.")
 			} else {
-				pseudoSocket = pseudo;
+				pseudoSocket = pseudo.toUpperCase();
 				connecte = true;
 				connectionState(connecte);
 				socket.emit('connecte');		
@@ -145,7 +142,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('getAllPopo', getAllPopo);
 
 	function getAllPopo() {
-		console.log('getAllPopo');
+		
 		Avatar.findOne({pseudo: pseudoSocket}, function(err, Av) {
 			if(Av != null){
 				var _mmo1 = Av.potionMMO1;

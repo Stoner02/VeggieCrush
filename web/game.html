@@ -292,9 +292,9 @@
 		//-------------------------------------
 		// Met à jour l'argent et l'exp
 		//-------------------------------------
-		socket.on('updateArgentExp', function (data) {
+		socket.on('updateExperienceArgent', function (data) { console.log("updateExperienceArgent: " + data.argent);
 			document.getElementById("moneyVal").innerHTML = data.argent;
-			document.getElementById("expVal").innerHTML = data.experience;
+			document.getElementById("expVal").innerHTML = data.exp;
 		});
 
 

@@ -1,4 +1,7 @@
 'use strict';
+var Transaction = require('../models/transaction')
+
+var serverr = require('../../server');
 
 var mongoose 	= require('mongoose');
 	var Avatar 	= mongoose.model('Avatars');
@@ -306,16 +309,19 @@ exports.buy_potion = function(req, res) {
 	new_transaction.pseudoSeller = 	req.params.avatarPseudo.toUpperCase();
 	var type = req.query.type.toUpperCase();
 	if(type == 'MMO'){
+
+		var price = (new_transaction.potion1 * Prix.potionMMO1)+
+		(new_transaction.potion2 * Prix.potionMMO2)+
+		(new_transaction.potion3 * Prix.potionMMO3)+
+		(new_transaction.potion4 * Prix.potionMMO4);
+
 		Avatar.findOneAndUpdate({pseudo: new_transaction.pseudoSeller, potionMMO1:{$gte: new_transaction.potion1}, potionMMO2:{$gte: new_transaction.potion2}, potionMMO3:{$gte: new_transaction.potion3}, potionMMO4:{$gte: new_transaction.potion4}},
 			{ $inc: { potionMMO1: (-1)*new_transaction.potion1,
 				potionMMO2: (-1)*new_transaction.potion2,
 					potionMMO3: (-1)*new_transaction.potion3,
 						potionMMO4: (-1)*new_transaction.potion4,
-							argent: (new_transaction.potion1 * Prix.potionMMO1)+
-							(new_transaction.potion2 * Prix.potionMMO2)+
-							(new_transaction.potion3 * Prix.potionMMO3)+
-							(new_transaction.potion4 * Prix.potionMMO4),
-							experience: argent,},
+							argent: price,
+							experience: price,},
 							$set: { dateArgent: moment() }},
 							{new: true}, function(err, Av) {
 								
@@ -334,20 +340,34 @@ exports.buy_potion = function(req, res) {
 								  });	
 								}else{
 									res.status(200).json({ message: 'Transaction effectuée' });
-									socket.emit("updateArgentExp", {argent: argent, experience: experience});
+
+									//----------------------
+									// Find socket of the client. Update argent, exp et tableau popo
+									//----------------------
+									for (var socketId in serverr.io.sockets.sockets) {
+										var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+										if(pseudo == new_transaction.pseudoSeller){
+											serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+											getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
+										}
+									}
+
 								}
 							});	
 	}else if(type == 'RTS'){
+
+		var price = (new_transaction.potion1 * Prix.potionRTS1)+
+		(new_transaction.potion2 * Prix.potionRTS2)+
+		(new_transaction.potion3 * Prix.potionRTS3)+
+		(new_transaction.potion4 * Prix.potionRTS4);
+
 		Avatar.findOneAndUpdate({pseudo: new_transaction.pseudoSeller, potionRTS1:{$gte: new_transaction.potion1}, potionRTS2:{$gte: new_transaction.potion2}, potionRTS3:{$gte: new_transaction.potion3}, potionRTS4:{$gte: new_transaction.potion4}},
 		{ $inc: { potionRTS1: (-1)*new_transaction.potion1,
 			potionRTS2: (-1)*new_transaction.potion2,
 				potionRTS3: (-1)*new_transaction.potion3,
 					potionRTS4: (-1)*new_transaction.potion4,
-						argent: (new_transaction.potion1 * Prix.potionRTS1)+
-						(new_transaction.potion2 * Prix.potionRTS2)+
-						(new_transaction.potion3 * Prix.potionRTS3)+
-						(new_transaction.potion4 * Prix.potionRTS4),
-						experience: argent,},
+						argent: price,
+						experience: price,},
 						$set: { dateArgent: moment() }},
 						{new: true}, function(err, Av) {
 							
@@ -366,20 +386,32 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
-								socket.emit("updateArgentExp", {argent: argent, experience: experience});
+								//----------------------
+								// Find socket of the client. Update argent, exp et tableau popo
+								//----------------------
+								for (var socketId in serverr.io.sockets.sockets) {
+									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+									if(pseudo == new_transaction.pseudoSeller){
+										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
+									}
+								}
 							}
 						  });	
 	}else if(type == 'VILLAGE'){
+
+		var price = (new_transaction.potion1 * Prix.potionVille1)+
+		(new_transaction.potion2 * Prix.potionVille2)+
+		(new_transaction.potion3 * Prix.potionVille3)+
+		(new_transaction.potion4 * Prix.potionVille4);
+
 		Avatar.findOneAndUpdate({pseudo: new_transaction.pseudoSeller, potionVille1:{$gte: new_transaction.potion1}, potionVille2:{$gte: new_transaction.potion2}, potionVille3:{$gte: new_transaction.potion3}, potionVille4:{$gte: new_transaction.potion4}},
 		{ $inc: { potionVille1: (-1)*new_transaction.potion1,
 			potionVille2: (-1)*new_transaction.potion2,
 				potionVille3: (-1)*new_transaction.potion3,
 					potionVille4: (-1)*new_transaction.potion4,
-						argent: (new_transaction.potion1 * Prix.potionVille1)+
-						(new_transaction.potion2 * Prix.potionVille2)+
-						(new_transaction.potion3 * Prix.potionVille3)+
-						(new_transaction.potion4 * Prix.potionVille4),
-						experience: argent,},
+						argent: price,
+						experience: price,},
 						$set: { dateArgent: moment() }},
 						{new: true}, function(err, Av) {
 							
@@ -398,7 +430,16 @@ exports.buy_potion = function(req, res) {
 							  });	
 							}else{
 								res.status(200).json({ message: 'Transaction effectuée' });
-								socket.emit("updateArgentExp", {argent: argent, experience: experience});
+								//----------------------
+								// Find socket of the client. Update argent, exp et tableau popo
+								//----------------------
+								for (var socketId in serverr.io.sockets.sockets) {
+									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+									if(pseudo == new_transaction.pseudoSeller){
+										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
+									}
+								}
 							}
 						  });	
 	}else{
@@ -422,4 +463,32 @@ exports.check_login = function(req, res){
 		
 }
 
+function getAllPopo(socket, pseudosocket) {
+	
+	var _pseudo = pseudosocket;
 
+	Avatar.findOne({pseudo: _pseudo}, function(err, Av) {
+		if(Av != null){
+			var _mmo1 = Av.potionMMO1;
+			var _mmo2 = Av.potionMMO2;
+			var _mmo3 = Av.potionMMO3;
+			var _mmo4 = Av.potionMMO4;
+
+			var _rts1 = Av.potionRTS1;
+			var _rts2 = Av.potionRTS2;
+			var _rts3 = Av.potionRTS3;
+			var _rts4 = Av.potionRTS4;
+
+			var _ville1 = Av.potionVille1;
+			var _ville2 = Av.potionVille2;
+			var _ville3 = Av.potionVille3;
+			var _ville4 = Av.potionVille4;
+
+			socket.emit("receiveAllPopo", {
+				mmo1: _mmo1, mmo2: _mmo2, mmo3: _mmo3, mmo4: _mmo4,
+				rts1: _rts1, rts2: _rts2, rts3: _rts3, rts4: _rts4,
+				ville1: _ville1, ville2: _ville2, ville3: _ville3, ville4: _ville4
+			});
+		}
+	});
+}
