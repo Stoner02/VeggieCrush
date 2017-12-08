@@ -105,7 +105,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 
-	socket.on('connectTry', function (pseudo, mdp, socket) {
+	socket.on('connectTry', function (pseudo, mdp) {
 
 		console.log(pseudo + " essaye de se connecter" + " mdp: " + mdp);
 
