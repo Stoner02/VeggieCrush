@@ -78,6 +78,14 @@
         alert('Pseudo déjà pris!');
     });
 
+
+    //-------------------------------------
+    // Existe sur un autre jeu
+    //-------------------------------------
+    socket.on('alreadyExist', function () {
+        alert('Cet utilisateur existe déjà dans l\'univers');
+    });
+
     //-------------------------------------
     // Inscription OK
     //-------------------------------------

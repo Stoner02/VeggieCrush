@@ -1,3 +1,5 @@
+var request = require('request');
+
 var express = require('express'),
 	app = express(),
 	port = process.env.PORT || 3000,
@@ -60,38 +62,42 @@ io.sockets.on('connection', function (socket) {
 	socket.nickname = 'STONER'; //todo Recup depuis la session
 
 	socket.on('inscription', function (pseudo, mdp) {
-		console.log('INSCRIPTION' + pseudo + mdp);
+		console.log('INSCRIPTION: ' + pseudo + " " + mdp);
 		Avatar.findOne({ pseudo: pseudo.toUpperCase() }, function (err, Av) {
-			if (Av == null) {
+			if (Av == null) { // pas encore inscrit chez nous
 
-				var new_avatar = new Avatar();
-				new_avatar.pseudo = pseudo.toUpperCase();
-				new_avatar.mdp = mdp;
-				new_avatar.argent = argentDepart;
-				new_avatar.dateArgent = moment();
-				new_avatar.coordx = 0;
-				new_avatar.coordy = 0;
-				new_avatar.potionVille1 = 50;
-				new_avatar.potionVille2 = 50;
-				new_avatar.potionVille3 = 50;
-				new_avatar.potionVille4 = 50;
-				new_avatar.potionRTS1 = 50;
-				new_avatar.potionRTS2 = 50;
-				new_avatar.potionRTS3 = 50;
-				new_avatar.potionRTS4 = 50;
-				new_avatar.potionMMO1 = 50;
-				new_avatar.potionMMO2 = 50;
-				new_avatar.potionMMO3 = 50;
-				new_avatar.potionMMO4 = 50;
-				new_avatar.experience = 0;
-				new_avatar.connecte = false;
+				var alreadyExist = false;
 
-				new_avatar.save(function (err, Av) {
-					if (err) {
-					} else {
-						socket.emit('inscritOk'); 
+				//-------------------------------------
+				// VERIFICATION
+				//-------------------------------------
+				//MMO
+				request('http://10.113.51.21:3000/users/'+ pseudo, function (error, response, body) {
+					
+				    // Déjà inscrit chez MMO
+					if (response.statusCode == 200) {
+						alreadyExist = true;
 					}
+					
+					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					//todo mettre tous les autres mmo ici
+					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+					//-------------------------
+					// n'existe null part
+					//-------------------------
+					if(!alreadyExist){
+						//todo ajouter chez les autres
+						addUserMMO(pseudo, mdp);
+					}
+					else{
+						console.log("L'utilisateur est déjà inscrit sur un autre jeu.");
+						socket.emit('alreadyExist');
+					}
+					addUser(pseudo, mdp, socket);
 				});
+	
 			} else {
 				socket.emit('pseudoPris');
 			}
@@ -99,7 +105,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 
-	socket.on('connectTry', function (pseudo, mdp) {
+	socket.on('connectTry', function (pseudo, mdp, socket) {
 
 		console.log(pseudo + " essaye de se connecter" + " mdp: " + mdp);
 
@@ -403,9 +409,49 @@ io.sockets.on('connection', function (socket) {
 });
 
 
+function addUser(pseudo, mdp, socket){
+	console.log("Inscription de l'utilisateur.");
+	var new_avatar = new Avatar();
+	new_avatar.pseudo = pseudo.toUpperCase();
+	new_avatar.mdp = mdp;
+	new_avatar.argent = argentDepart;
+	new_avatar.dateArgent = moment();
+	new_avatar.coordx = 0;
+	new_avatar.coordy = 0;
+	new_avatar.potionVille1 = 50;
+	new_avatar.potionVille2 = 50;
+	new_avatar.potionVille3 = 50;
+	new_avatar.potionVille4 = 50;
+	new_avatar.potionRTS1 = 50;
+	new_avatar.potionRTS2 = 50;
+	new_avatar.potionRTS3 = 50;
+	new_avatar.potionRTS4 = 50;
+	new_avatar.potionMMO1 = 50;
+	new_avatar.potionMMO2 = 50;
+	new_avatar.potionMMO3 = 50;
+	new_avatar.potionMMO4 = 50;
+	new_avatar.experience = 0;
+	new_avatar.connecte = false;
 
+	new_avatar.save(function (err, Av) {
+		if (err) {
+		} else {
+			socket.emit('inscritOk'); 
+		}
+	});
+}
 
-
+function addUserMMO(peudo, mdp){
+	request.post('http://10.113.51.21:3000/users', {
+		form:{username:pseudo.toUpperCase(), password: mdp}}, function(err,httpResponse,body){
+			if(httpResponse.statusCode == 200){
+				console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
+			}
+			else{
+			   console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+			}
+   });
+}
 
 
 
