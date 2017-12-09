@@ -1,130 +1,114 @@
-var userService = require('./UserServices');
-var socket = userService.socket;
+var serverr         = require('../../server');
+var Avatar          = serverr.Avatar;
 
-var serverr = require('../../server');
-var Avatar = serverr.Avatar;
-
-//----------------------------------
-// Update bonus
-//----------------------------------
-function updateBonus(bonus){
-    if(Av != null){
-        socket.emit("updateBonus", {bonus: bonus});
-    }
-}
-
-//----------------------------------
-// Get coordinates
-//---------------------------------- 
-socket.on('getCoord', function () {
-    Avatar.findOne({pseudo: socket.nickname}, function(err, Av) {
+module.exports = {
+    //----------------------------------
+    // Update bonus
+    //----------------------------------
+    updateBonus: function (bonus, socket){
         if(Av != null){
-            socket.emit("updateCoord", {x: Av.coordx, y: Av.coordy});
+            socket.emit("updateBonus", {bonus: bonus});
         }
-    });
-})
+    },
 
-//----------------------------------
-// Set coordinates
-//----------------------------------
-function setCoord(x, y){
-    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
-        { coordx: x, coordy: y }, function (err, Av) { });
-}
+    //----------------------------------
+    // Get coordinates
+    //---------------------------------- 
+    emitGetCoord: function (socket){
+        Avatar.findOne({pseudo: socket.nickname}, function(err, Av) {
+            if(Av != null){
+                socket.emit("updateCoord", {x: Av.coordx, y: Av.coordy});
+            }
+        });
+    },
 
-//----------------------------------
-// CHANGER POSITION
-//----------------------------------
-socket.on('changePosition', function (data) {
-    
-    var x = data.xCoord;
-    var y = data.yCoord;
+    //----------------------------------
+    // Set coordinates
+    //----------------------------------
+    setCoord: function (x, y, socket){
+        Avatar.findOneAndUpdate({ pseudo: socket.nickname },
+            { coordx: x, coordy: y }, function (err, Av) { });
+    },
 
-    if(x >= 0 && y >= 0){
-        console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
-        setCoord(x, y);
-        //TODO PREVENIR TOUT LE MONDE DU CHANGEMENT DE POSITION
+    //----------------------------------
+    // CHANGER POSITION
+    //----------------------------------
+    onChangePosition: function (data, socket){
+        var x = data.xCoord;
+        var y = data.yCoord;
 
-        //TODO updateBonus si besoin
+        if(x >= 0 && y >= 0){
+            console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
+            setCoord(x, y, socket);
+            //TODO PREVENIR TOUT LE MONDE DU CHANGEMENT DE POSITION
 
-        //TODO regarder si on est dans un village ou un BG
-    }
+            //TODO updateBonus si besoin
 
-});
+            //TODO regarder si on est dans un village ou un BG
+        }
+    },
 
-
-//----------------------------------
-// RENTRER DANS VILLAGE
-//----------------------------------
-socket.on('updateVillage', function (data) {
-    
-    var village = data.village;
-
-    if(village != null){
-        console.log(socket.nickname + ' rentre dans le village: ' + village);
+    //----------------------------------
+    // RENTRER DANS VILLAGE
+    //----------------------------------
+    onUpdateVillage: function (data, socket){
+        var village = data.village;
         
-        //TODO récupérer les coordonnées du village et setCoord(x,y)
+        if(village != null){
+            console.log(socket.nickname + ' rentre dans le village: ' + village);
+            
+            //TODO récupérer les coordonnées du village et setCoord(x,y)
 
-        //TODO updateBonus si besoin
-    }
-});
+            //TODO updateBonus si besoin
+        }
+    },
 
+    //----------------------------------
+    // GET VILLAGES
+    //----------------------------------
+    emitGetVillage: function (socket){
+        //TODO RECUPERER LES VILLAGES
+        var arrayVillages = ["Dalaran", "Orgrimar", "Stormwind"];
+        socket.emit("receiveVillages", {villages: arrayVillages});
+    },
 
-//----------------------------------
-// GET VILLAGES
-//----------------------------------
-socket.on('getVillages', function () {
-    
-    //TODO RECUPERER LES VILLAGES
-    var arrayVillages = ["Dalaran", "Orgrimar", "Stormwind"];
-    socket.emit("receiveVillages", {villages: arrayVillages});
-})
-
-
-//----------------------------------
-// RENTRER DANS BG
-//----------------------------------
-socket.on('updateBg', function (data) {
-    
-    var bg = data.bg;
-
-    if(bg != null){
-        console.log(socket.nickname + ' rentre dans le BG: ' + bg);
+    //----------------------------------
+    // RENTRER DANS BG
+    //----------------------------------
+    onUpdateBg: function (data, socket){
+        var bg = data.bg;
         
-        //TODO récupérer les coordonnées du village et setCoord(x,y)
+        if(bg != null){
+            console.log(socket.nickname + ' rentre dans le BG: ' + bg);
+            
+            //TODO récupérer les coordonnées du village et setCoord(x,y)
 
-        //TODO updateBonus si besoin
+            //TODO updateBonus si besoin
+        }
+    },
+
+    emitGetBg: function (socket){
+        //TODO RECUPERER LES BG
+        var arrayBg = ["Tarides", "Dorotar", "MorteMine"];
+        socket.emit("receiveBg", {bg: arrayBg});
+    },
+
+    onChangeCoord: function (x, y, socket){
+        console.log('Changement coordonnées');
+        Avatar.findOneAndUpdate({ pseudo: socket.nickname },
+            { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
+    },
+
+    onChangeBataille: function (x, y, socket){
+        console.log('Changement Bataille');
+        Avatar.findOneAndUpdate({ pseudo: socket.nickname },
+            { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
+    },
+
+    onChangeVillage: function (nomVillage, socket){
+        console.log('Changement Village');
+        Avatar.findOneAndUpdate({ pseudo: socket.nickname },
+            { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
     }
-});
 
-
-//----------------------------------
-// GET BG
-//----------------------------------
-socket.on('getBg', function () {
-    
-    //TODO RECUPERER LES BG
-    var arrayBg = ["Tarides", "Dorotar", "MorteMine"];
-    socket.emit("receiveBg", {bg: arrayBg});
-})
-
-
-socket.on('changeCoord', function (x, y) {
-    console.log('Changement coordonnées');
-    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
-        { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
-});
-
-
-socket.on('changeBataille', function (x, y) {
-    console.log('Changement Bataille');
-    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
-        { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
-});
-
-
-socket.on('changeVillage', function (nomVillage) {
-    console.log('Changement Village');
-    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
-        { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
-});
+};

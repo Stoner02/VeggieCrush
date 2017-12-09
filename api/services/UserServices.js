@@ -1,26 +1,13 @@
-var serverr = require('../../server');
-var Avatar = serverr.Avatar;
-var request = serverr.request;
+var serverr         = require('../../server');
+var Avatar          = serverr.Avatar;
 
-var argentDepart = 1000;
-var moment = require('moment');
-var timezone = require('moment-timezone');
+var userServices    = require('./UserServices');
+var moveServices    = require("./MoveServices");
+var moneyServices   = require("./MoneyServices");
+var potionsServices = require("./PotionsServices");
 
-
-serverr.io.sockets.on('connection', function (socket) {
-
-	var coordSocketx = 0;
-	var coordSockety = 0;
-	var bonusHero = 0;
-	var bonusVillage1 = 0;
-	var bonusVillage2 = 0;
-	var bonusVillage3 = 0; 
-	var bonusVillage4 = 0;
-	var malusRTS = 0;
-	var connecte = false;
-
-
-	socket.on('inscription', function (_pseudo, _mdp) {
+module.exports = {
+	onInscription: function(_pseudo, _mdp, socket){
 		var pseudo = _pseudo, mdp = _mdp;
 		console.log('INSCRIPTION: ' + pseudo + " " + mdp);
 		Avatar.findOne({ pseudo: pseudo.toUpperCase() }, function (err, Av) {
@@ -31,11 +18,9 @@ serverr.io.sockets.on('connection', function (socket) {
 				socket.emit('pseudoPris');
 			}
 		});
-	});
+	},
 
-
-	socket.on('connectTry', function (_pseudo, mdp) {
-
+	fonConnectTry: function (_pseudo, mdp, socket){
 		var pseudo = _pseudo;
 		console.log(pseudo + " essaye de se connecter" + " mdp: " + mdp);
 
@@ -77,11 +62,9 @@ serverr.io.sockets.on('connection', function (socket) {
 				connectUser(pseudo);		
 			}
 		});
-	});
+	},
 
-
-	socket.on('isAllowedToPlay', function (_pseudo, _mdp) {
-
+	onIsAllowedToPlay: function (_pseudo, _mdp, socket){
 		var pseudo = _pseudo;
 		var mdp = _mdp;
 
@@ -94,54 +77,59 @@ serverr.io.sockets.on('connection', function (socket) {
 					socket.nickname = pseudo.toUpperCase();
 				} 
 				socket.emit("getAutorisationCon", {autorisation: autorisation});
+				potionsServices.getAllPopo(socket);
+				moneyServices.updateMoneyExp(socket);
+				moveServices.emitGetCoord(socket);
+				moveServices.emitGetVillage(socket);
+				moveServices.emitGetBg(socket);
+
 			});
 		}
 		else{
 			socket.emit("getAutorisationCon", {autorisation: autorisation});
-		}
-		
-	});
-	
+			potionsServices.getAllPopo(socket);
+			moneyServices.updateMoneyExp(socket);
+			moveServices.emitGetCoord(socket);
+			moveServices.emitGetVillage(socket);
+			moveServices.emitGetBg(socket);
 
-	function connectUser(_pseudo){
+		}
+	},
+		
+	connectUser: function (_pseudo, socket){
 		var pseudo = _pseudo;
 		connecte = true;
 		connectionState(connecte, pseudo);
 		socket.emit('connecte');
 		console.log(pseudo + " s'est connecté");
-	}
-
+	},
 
 	//----------------------------------------
 	// Change connecte state of the user
 	//----------------------------------------
-	function connectionState(state, _pseudo){
+	connectionState: function (state, _pseudo){
 		var pseudo = _pseudo.toUpperCase();
 		Avatar.findOneAndUpdate({ pseudo: pseudo },
 			{ connecte: state }, function (err, Av) { console.log(pseudo+" change son etant connecté en : " + state); });
-	}
+	},
 
-
-	//----------------------------------------
-	// Disconnect the user
-	//----------------------------------------
-	socket.on('userDisconnect', function () {
+	onUserDisconnect: function (socket){
 		if(socket.nickname != null){
 			console.log('disconnect: ' + socket.nickname);
 			connectionState(false, socket.nickname);
-		}
-	//	socket.disconnect(0);
-	});
 
-	socket.on('disconnect', function(data) {
-		if(socket.nickname != null){
-			console.log('disconnect: ' + socket.nickname);
-			connectionState(false, socket.nickname);
+			for (var socketId in serverr.io.sockets.sockets) {
+				var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+				if(pseudo == socket.nickname){
+					socket.disconnect(socketId);
+				}
+			}
 		}
-	//	socket.disconnect(0);
-    });
 
-	function addUser(pseudo, mdp, socket){
+		//	socket.disconnect(0);
+	},
+
+	addUser: function (pseudo, mdp, socket){
 		console.log("Inscription de l'utilisateur.");
 		var new_avatar = new Avatar();
 		new_avatar.pseudo = pseudo.toUpperCase();
@@ -171,10 +159,10 @@ serverr.io.sockets.on('connection', function (socket) {
 				socket.emit('inscritOk'); 
 			}
 		});
-	}
+	},
 
 
-	function addUserMMO(_pseudo, _mdp){
+	addUserMMO: function (_pseudo, _mdp){
 
 		var pseudo = _pseudo, mdp = _mdp;
 		request.post('http://10.113.51.21:3000/users', {
@@ -186,23 +174,22 @@ serverr.io.sockets.on('connection', function (socket) {
 				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
 				}
 	});
-	}
+	},
 
-	function addUserRPG(){
+	addUserRPG: function (){
 	//todo
-	}
+	},
 
-	function addUserVille(){
+	addUserVille: function (){
 	//todo
-	}
-
+	},
 
 	//------------------------------------
 	// Inscrit le user dans notre BD s'il n'y est pas.
 	// Si c'est la première fois qu'il s'inscrit dans "l'univers", son inscription est broadcast aux autres jeux.
 	// Refuse l'inscription si le user existe déjà dans l'univers.
 	//------------------------------------
-	function addUserInUniverse(_pseudo, _mdp, _socket){
+	addUserInUniverse: function (_pseudo, _mdp, _socket){
 
 		var socket = _socket;
 		var pseudo = _pseudo;
@@ -249,13 +236,4 @@ serverr.io.sockets.on('connection', function (socket) {
 		//});
 
 	}
-
-
-	
-
-	module.exports.socket = socket;
-	var moveServices = require("./MoveServices");
-	var moneyServices = require("./MoneyServices");
-	var potionsServices = require("./PotionsServices");
-});
-
+};

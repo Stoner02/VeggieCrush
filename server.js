@@ -47,9 +47,4 @@ module.exports.io = io;
 module.exports.Avatar = Avatar;
 module.exports.request = request;
 
-var userServices = require('./api/services/UserServices');
-/*
-var moveServices = require("./api/services/MoveServices");
-var moneyServices = require("./api/services/MoneyServices");
-var potionsServices = require("./api/services/PotionsServices");
-*/
+var services = require('./api/services/Services');

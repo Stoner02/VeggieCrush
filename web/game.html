@@ -237,11 +237,14 @@ document.getElementById('shareBtn').onclick = function() {
 		socket.emit('isAllowedToPlay', pseudo, mdp);
 
 		socket.on('getAutorisationCon', function (data) {
-			console.log("VERI AUTORISATION: " + data.autorisation);
+			
 			if(!data.autorisation){
+				console.log("NO AUTORISATION");
 				window.location = "index.html";
 			}
-			else{
+			else{ 
+				console.log("AUTORISATION OK");
+				/*
 				//-------------------------------------
 				// Récupérer toutes les potions
 				//-------------------------------------
@@ -261,7 +264,7 @@ document.getElementById('shareBtn').onclick = function() {
 				//-------------------------------------
 				// Récupérer tous les bg
 				//-------------------------------------
-				socket.emit('getBg');
+				socket.emit('getBg'); */
 			}
 		});
 
