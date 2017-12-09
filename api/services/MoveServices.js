@@ -39,7 +39,7 @@ module.exports = {
 
         if(x >= 0 && y >= 0){
             console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
-            setCoord(x, y, socket);
+            this.setCoord(x, y, socket);
             //TODO PREVENIR TOUT LE MONDE DU CHANGEMENT DE POSITION
 
             //TODO updateBonus si besoin
