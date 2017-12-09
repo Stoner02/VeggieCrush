@@ -87,20 +87,26 @@ serverr.io.sockets.on('connection', function (socket) {
 
 		var autorisation = false;
 
-		Avatar.findOne({ pseudo: pseudo.toUpperCase(), mdp: mdp }, function (err, Av) {
-			if (Av != null) {
-				autorisation = true;
-				socket.nickname = pseudo.toUpperCase();
-			} 
+		if(pseudo != null && mdp != null){
+			Avatar.findOne({ pseudo: pseudo.toUpperCase(), mdp: mdp, connecte: true }, function (err, Av) {
+				if (Av != null) {
+					autorisation = true;
+					socket.nickname = pseudo.toUpperCase();
+				} 
+				socket.emit("getAutorisationCon", {autorisation: autorisation});
+			});
+		}
+		else{
 			socket.emit("getAutorisationCon", {autorisation: autorisation});
-		});
+		}
+		
 	});
 	
 
 	function connectUser(_pseudo){
 		var pseudo = _pseudo;
 		connecte = true;
-		connectionState(connecte);
+		connectionState(connecte, pseudo);
 		socket.emit('connecte');
 		console.log(pseudo + " s'est connecté");
 	}
@@ -109,9 +115,10 @@ serverr.io.sockets.on('connection', function (socket) {
 	//----------------------------------------
 	// Change connecte state of the user
 	//----------------------------------------
-	function connectionState(state){
-		Avatar.findOneAndUpdate({ pseudo: socket.nickname },
-			{ connecte: state }, function (err, Av) { });
+	function connectionState(state, _pseudo){
+		var pseudo = _pseudo.toUpperCase();
+		Avatar.findOneAndUpdate({ pseudo: pseudo },
+			{ connecte: state }, function (err, Av) { console.log(pseudo+" change son etant connecté en : " + state); });
 	}
 
 
@@ -119,15 +126,19 @@ serverr.io.sockets.on('connection', function (socket) {
 	// Disconnect the user
 	//----------------------------------------
 	socket.on('userDisconnect', function () {
-		console.log('disconnect: ' + socket.nickname);
-		connectionState(false);
-		socket.disconnect(0);
+		if(socket.nickname != null){
+			console.log('disconnect: ' + socket.nickname);
+			connectionState(false, socket.nickname);
+		}
+	//	socket.disconnect(0);
 	});
 
-	
-	
 	socket.on('disconnect', function(data) {
-        console.log('disconnect!');
+		if(socket.nickname != null){
+			console.log('disconnect: ' + socket.nickname);
+			connectionState(false, socket.nickname);
+		}
+	//	socket.disconnect(0);
     });
 
 	function addUser(pseudo, mdp, socket){
