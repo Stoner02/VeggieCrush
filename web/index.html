@@ -12,6 +12,12 @@
   <!-- END STYLESHEETS -->
 
 </head>
+<body>
+
+    <form style="display: hidden" action="game.html" method="POST" id="form">
+        <input type="hidden" id="pseudonyme" name="pseudonyme" value=""/>
+        <input type="hidden" id="pass" name="password" value=""/>
+      </form>
 
 <!-- BEGIN FACEBOOK LOGIN -->
 <script>
@@ -129,7 +135,9 @@ document.getElementById('shareBtn').onclick = function() {
   // Connexion réussie, redirection sur la page du jeu
   //-------------------------------------
 	socket.on('connecte', function (data) {
-    window.location = "game.html";
+    //$("#form").submit(); Ce qu'il faudrait faire si les post étaient acceptés...
+    window.location = "game.html?pseudo="+$("#pseudonyme").val()+"&mdp="+$("#pass").val();
+    
   });
 
   //-------------------------------------
@@ -144,8 +152,11 @@ document.getElementById('shareBtn').onclick = function() {
   //-------------------------------------
 	function connexion() {
     var pseudo = document.getElementById("email").value;
-    var mdp = document.getElementById("password").value;
+    var mdp = document.getElementById("password").value; 
+    $("#pseudonyme").val(pseudo);
+    $("#pass").val(mdp);
     socket.emit('connectTry', pseudo, mdp);
+    
   } 
 
 
@@ -155,4 +166,7 @@ document.getElementById('shareBtn').onclick = function() {
 <!-- END JAVASCRIPT -->
 
 </body>
+
+
+
 </html>

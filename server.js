@@ -24,7 +24,7 @@ app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
 
-
+ 
 //---------------------------------------
 // Serveur WEB
 //---------------------------------------
@@ -37,6 +37,7 @@ var app2 = app2Func.listen(8080, function () {
 	console.log('Server running on 8080...');
 });
 
+
 var io = require("socket.io");
 var io = io.listen(app2);
 var Avatar = mongoose.model('Avatars');
@@ -47,3 +48,8 @@ module.exports.Avatar = Avatar;
 module.exports.request = request;
 
 var userServices = require('./api/services/UserServices');
+/*
+var moveServices = require("./api/services/MoveServices");
+var moneyServices = require("./api/services/MoneyServices");
+var potionsServices = require("./api/services/PotionsServices");
+*/

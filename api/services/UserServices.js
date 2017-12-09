@@ -8,20 +8,16 @@ var timezone = require('moment-timezone');
 
 
 serverr.io.sockets.on('connection', function (socket) {
-	var pseudoSocket = 'STONER'; //todo Recup depuis la session
+
 	var coordSocketx = 0;
 	var coordSockety = 0;
 	var bonusHero = 0;
 	var bonusVillage1 = 0;
 	var bonusVillage2 = 0;
-	var bonusVillage3 = 0;
+	var bonusVillage3 = 0; 
 	var bonusVillage4 = 0;
 	var malusRTS = 0;
 	var connecte = false;
- 
-	socket.nickname = 'STONER'; //todo Recup depuis la session
-
-	module.exports.socket = socket;
 
 
 	socket.on('inscription', function (_pseudo, _mdp) {
@@ -84,12 +80,29 @@ serverr.io.sockets.on('connection', function (socket) {
 	});
 
 
+	socket.on('isAllowedToPlay', function (_pseudo, _mdp) {
+
+		var pseudo = _pseudo;
+		var mdp = _mdp;
+
+		var autorisation = false;
+
+		Avatar.findOne({ pseudo: pseudo.toUpperCase(), mdp: mdp }, function (err, Av) {
+			if (Av != null) {
+				autorisation = true;
+				socket.nickname = pseudo.toUpperCase();
+			} 
+			socket.emit("getAutorisationCon", {autorisation: autorisation});
+		});
+	});
+	
+
 	function connectUser(_pseudo){
 		var pseudo = _pseudo;
-		pseudoSocket = pseudo.toUpperCase();
 		connecte = true;
 		connectionState(connecte);
 		socket.emit('connecte');
+		console.log(pseudo + " s'est connecté");
 	}
 
 
@@ -97,7 +110,7 @@ serverr.io.sockets.on('connection', function (socket) {
 	// Change connecte state of the user
 	//----------------------------------------
 	function connectionState(state){
-		Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+		Avatar.findOneAndUpdate({ pseudo: socket.nickname },
 			{ connecte: state }, function (err, Av) { });
 	}
 
@@ -106,11 +119,16 @@ serverr.io.sockets.on('connection', function (socket) {
 	// Disconnect the user
 	//----------------------------------------
 	socket.on('userDisconnect', function () {
-		console.log('disconnect: ' + pseudoSocket);
+		console.log('disconnect: ' + socket.nickname);
 		connectionState(false);
 		socket.disconnect(0);
 	});
 
+	
+	
+	socket.on('disconnect', function(data) {
+        console.log('disconnect!');
+    });
 
 	function addUser(pseudo, mdp, socket){
 		console.log("Inscription de l'utilisateur.");
@@ -222,12 +240,11 @@ serverr.io.sockets.on('connection', function (socket) {
 	}
 
 
+	
+
+	module.exports.socket = socket;
 	var moveServices = require("./MoveServices");
 	var moneyServices = require("./MoneyServices");
 	var potionsServices = require("./PotionsServices");
-
 });
-
-
-
 

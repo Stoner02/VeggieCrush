@@ -1,6 +1,9 @@
 var userService = require('./UserServices');
 var socket = userService.socket;
 
+var serverr = require('../../server');
+var Avatar = serverr.Avatar;
+
 //----------------------------------
 // Update bonus
 //----------------------------------
@@ -12,9 +15,9 @@ function updateBonus(bonus){
 
 //----------------------------------
 // Get coordinates
-//----------------------------------
+//---------------------------------- 
 socket.on('getCoord', function () {
-    Avatar.findOne({pseudo: pseudoSocket}, function(err, Av) {
+    Avatar.findOne({pseudo: socket.nickname}, function(err, Av) {
         if(Av != null){
             socket.emit("updateCoord", {x: Av.coordx, y: Av.coordy});
         }
@@ -25,7 +28,7 @@ socket.on('getCoord', function () {
 // Set coordinates
 //----------------------------------
 function setCoord(x, y){
-    Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
         { coordx: x, coordy: y }, function (err, Av) { });
 }
 
@@ -38,7 +41,7 @@ socket.on('changePosition', function (data) {
     var y = data.yCoord;
 
     if(x >= 0 && y >= 0){
-        console.log('changementPosition de ' + pseudoSocket + ' en ' + x + ' ' + y);
+        console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
         setCoord(x, y);
         //TODO PREVENIR TOUT LE MONDE DU CHANGEMENT DE POSITION
 
@@ -58,7 +61,7 @@ socket.on('updateVillage', function (data) {
     var village = data.village;
 
     if(village != null){
-        console.log(pseudoSocket + ' rentre dans le village: ' + village);
+        console.log(socket.nickname + ' rentre dans le village: ' + village);
         
         //TODO récupérer les coordonnées du village et setCoord(x,y)
 
@@ -86,7 +89,7 @@ socket.on('updateBg', function (data) {
     var bg = data.bg;
 
     if(bg != null){
-        console.log(pseudoSocket + ' rentre dans le BG: ' + bg);
+        console.log(socket.nickname + ' rentre dans le BG: ' + bg);
         
         //TODO récupérer les coordonnées du village et setCoord(x,y)
 
@@ -108,20 +111,20 @@ socket.on('getBg', function () {
 
 socket.on('changeCoord', function (x, y) {
     console.log('Changement coordonnées');
-    Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
         { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
 });
 
 
 socket.on('changeBataille', function (x, y) {
     console.log('Changement Bataille');
-    Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
         { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
 });
 
 
 socket.on('changeVillage', function (nomVillage) {
     console.log('Changement Village');
-    Avatar.findOneAndUpdate({ pseudo: pseudoSocket },
+    Avatar.findOneAndUpdate({ pseudo: socket.nickname },
         { coordx: x, coordy: y }, { new: true }, function (err, Av) { });
 });

@@ -13,6 +13,22 @@
 
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script type="text/javascript">
+
+		var getUrlParameter = function getUrlParameter(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&'),
+				sParameterName,
+				i;
+
+			for (i = 0; i < sURLVariables.length; i++) {
+				sParameterName = sURLVariables[i].split('=');
+
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
+		};
+
 		(function() {
 
 			game = new Phaser.Game('100', '125', Phaser.AUTO, 'game-container');
@@ -31,7 +47,7 @@
 		})();
 	</script>	
 	<script>
-   console.log('ici');
+   
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '145103292878529',
@@ -53,7 +69,7 @@
    }(document, 'script', 'facebook-jssdk'));
    
    function checkLoginState() {
-   console.log('ici');
+ 
   FB.getLoginStatus(function(response) {
  //   statusChangeCallback(response);
 	console.log(response.status);
@@ -63,6 +79,7 @@
 	console.log(response.body);
 });
 }
+/*
 document.getElementById('shareBtn').onclick = function() {
   FB.ui({
     method: 'share',
@@ -70,7 +87,7 @@ document.getElementById('shareBtn').onclick = function() {
     href: 'http://VeggiesCrush.be',
 	quote: 'Mon Score!',
   }, function(response){});
-}
+}*/
 </script>
 </head>
 <body> 
@@ -215,31 +232,40 @@ document.getElementById('shareBtn').onclick = function() {
 
 		var socket = io.connect();
 
-		var pseudo = "STONER" 	//TODO recup du cookie
-		var mdp = "123" 		//TODO recup du cookie
-		socket.emit('connectTry', pseudo, mdp);
-		
-		//-------------------------------------
-		// Récupérer toutes les potions
-		//-------------------------------------
-		socket.emit('getAllPopo');
-		//-------------------------------------
-		// Récupérer l'argent/exp
-		//-------------------------------------
-		socket.emit('getMoneyExp');
-		//-------------------------------------
-		// Récupérer la position du joueur
-		//-------------------------------------
-		socket.emit('getCoord');
-		//-------------------------------------
-		// Récupérer tous les villages
-		//-------------------------------------
-		socket.emit('getVillages');
-		//-------------------------------------
-		// Récupérer tous les bg
-		//-------------------------------------
-		socket.emit('getBg');
-		
+		var pseudo = getUrlParameter('pseudo');
+		var mdp = getUrlParameter('mdp');		
+		socket.emit('isAllowedToPlay', pseudo, mdp);
+
+		socket.on('getAutorisationCon', function (data) {
+			console.log("VERI AUTORISATION: " + data.autorisation);
+			if(!data.autorisation){
+				window.location = "index.html";
+			}
+			else{
+				//-------------------------------------
+				// Récupérer toutes les potions
+				//-------------------------------------
+				socket.emit('getAllPopo');
+				//-------------------------------------
+				// Récupérer l'argent/exp
+				//-------------------------------------
+				socket.emit('getMoneyExp');
+				//-------------------------------------
+				// Récupérer la position du joueur
+				//-------------------------------------
+				socket.emit('getCoord');
+				//-------------------------------------
+				// Récupérer tous les villages
+				//-------------------------------------
+				socket.emit('getVillages');
+				//-------------------------------------
+				// Récupérer tous les bg
+				//-------------------------------------
+				socket.emit('getBg');
+			}
+		});
+
+
 		//-------------------------------------
 		// Met à jour les coordonnées
 		//-------------------------------------
@@ -371,6 +397,7 @@ document.getElementById('shareBtn').onclick = function() {
 			console.log("Erreur connexion.");
 		});
 		
+
 		document.getElementById('shareBtn').onclick = function() {
 		  FB.ui({
 			method: 'share',
@@ -380,6 +407,7 @@ document.getElementById('shareBtn').onclick = function() {
 		  }, function(response){});
 		}
 
+	
 	</script>
 
 </body>

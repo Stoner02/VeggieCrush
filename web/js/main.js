@@ -483,5 +483,5 @@ function createPopo(){
 				'addPotionVille1', 'addPotionVille2', 'addPotionVille3', 'addPotionVille4'];
 	var index = Math.floor((Math.random() * array.length) + 0);	
 	console.log("CREATION " + array[index]);
-	socket.emit(array[index]);		
+	socket.emit(array[index]);	
 };
