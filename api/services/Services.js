@@ -1,9 +1,5 @@
 
 var serverr         = require('../../server');
-var request         = serverr.request;
-var argentDepart    = 1000;
-var moment          = require('moment');
-var timezone        = require('moment-timezone');
 
 var userServices    = require('./UserServices');
 var moveServices    = require("./MoveServices");

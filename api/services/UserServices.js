@@ -1,5 +1,9 @@
 var serverr         = require('../../server');
 var Avatar          = serverr.Avatar;
+var request         = serverr.request;
+var argentDepart    = 1000;
+var moment          = require('moment');
+var timezone        = require('moment-timezone');
 
 var userServices    = require('./UserServices');
 var moveServices    = require("./MoveServices");
@@ -7,12 +11,66 @@ var moneyServices   = require("./MoneyServices");
 var potionsServices = require("./PotionsServices");
 
 module.exports = {
+
+	//------------------------------------
+	// Inscrit le user dans notre BD s'il n'y est pas.
+	// Si c'est la première fois qu'il s'inscrit dans "l'univers", son inscription est broadcast aux autres jeux.
+	// Refuse l'inscription si le user existe déjà dans l'univers.
+	//------------------------------------
+	addUserInUniverse: function addUserInUniverse(_pseudo, _mdp, _socket){
+		
+		var socket = _socket;
+		var pseudo = _pseudo;
+		var mdp = _mdp;
+
+		var alreadyExist = false;
+
+		//-------------------------------------
+		// Existence verification
+		//-------------------------------------
+		//todo si le serveur n'existe pas ça prend 20ans à passer l'instruction...
+		/*request('http://10.113.51.21:3000/users/'+ pseudo, function (error, response, body) {
+			
+			// Déjà inscrit chez MMO 
+			if (response != null && response.statusCode == 200) {
+				alreadyExist = true;
+			}
+			request('???????????????????????/'+ pseudo, function (error, response, body) {
+				// Déjà inscrit chez RTS
+				if (response.statusCode == 200) {
+					alreadyExist = true;
+				}
+				request('???????????????????????/'+ pseudo, function (error, response, body) {
+					// Déjà inscrit chez Farmville
+					if (response.statusCode == 200) {
+						alreadyExist = true;
+					}
+				});
+			});
+			*/
+			//-------------------------
+			// Ajouter dans les autres jeux
+			//-------------------------
+			if(!alreadyExist){
+				module.exports.addUserMMO(pseudo, mdp);
+				module.exports.addUserRPG(); 	//todo
+				module.exports.addUserVille(); //todo
+			}
+			else{
+				console.log("L'utilisateur est déjà inscrit sur un autre jeu.");
+				socket.emit('alreadyExist');
+			}
+			module.exports.addUser(pseudo, mdp, socket);
+		//});
+
+	},
+
 	onInscription: function(_pseudo, _mdp, socket){
 		var pseudo = _pseudo, mdp = _mdp;
 		console.log('INSCRIPTION: ' + pseudo + " " + mdp);
 		Avatar.findOne({ pseudo: pseudo.toUpperCase() }, function (err, Av) {
 			if (Av == null) { 
-				addUserInUniverse(pseudo, mdp, socket);
+				module.exports.addUserInUniverse(pseudo, mdp, socket);
 			}
 			else {
 				socket.emit('pseudoPris');
@@ -184,56 +242,5 @@ module.exports = {
 	//todo
 	},
 
-	//------------------------------------
-	// Inscrit le user dans notre BD s'il n'y est pas.
-	// Si c'est la première fois qu'il s'inscrit dans "l'univers", son inscription est broadcast aux autres jeux.
-	// Refuse l'inscription si le user existe déjà dans l'univers.
-	//------------------------------------
-	addUserInUniverse: function (_pseudo, _mdp, _socket){
-
-		var socket = _socket;
-		var pseudo = _pseudo;
-		var mdp = _mdp;
-
-		var alreadyExist = false;
-
-		//-------------------------------------
-		// Existence verification
-		//-------------------------------------
-		//todo si le serveur n'existe pas ça prend 20ans à passer l'instruction...
-		/*request('http://10.113.51.21:3000/users/'+ pseudo, function (error, response, body) {
-			
-			// Déjà inscrit chez MMO 
-			if (response != null && response.statusCode == 200) {
-				alreadyExist = true;
-			}
-			request('???????????????????????/'+ pseudo, function (error, response, body) {
-				// Déjà inscrit chez RTS
-				if (response.statusCode == 200) {
-					alreadyExist = true;
-				}
-				request('???????????????????????/'+ pseudo, function (error, response, body) {
-					// Déjà inscrit chez Farmville
-					if (response.statusCode == 200) {
-						alreadyExist = true;
-					}
-				});
-			});
-			*/
-			//-------------------------
-			// Ajouter dans les autres jeux
-			//-------------------------
-			if(!alreadyExist){
-				addUserMMO(pseudo, mdp);
-				addUserRPG(); 	//todo
-				addUserVille(); //todo
-			}
-			else{
-				console.log("L'utilisateur est déjà inscrit sur un autre jeu.");
-				socket.emit('alreadyExist');
-			}
-			addUser(pseudo, mdp, socket);
-		//});
-
-	}
+	
 };
