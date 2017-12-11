@@ -78,7 +78,7 @@ module.exports = {
 		});
 	},
 
-	fonConnectTry: function (_pseudo, mdp, socket){
+	onConnectTry: function (_pseudo, mdp, socket){
 		var pseudo = _pseudo;
 		console.log(pseudo + " essaye de se connecter" + " mdp: " + mdp);
 
@@ -108,8 +108,8 @@ module.exports = {
 					});
 					*/
 					if(alreadyExist){
-						connectUser(pseudo);
-						addUser(pseudo, mdp, socket);
+						module.exports.connectUser(pseudo, socket);
+						module.exports.addUser(pseudo, mdp, socket);
 					}
 					else{
 						socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
@@ -117,7 +117,7 @@ module.exports = {
 					}
 			//	});	
 			}else {
-				connectUser(pseudo);		
+				module.exports.connectUser(pseudo, socket);		
 			}
 		});
 	},
@@ -157,7 +157,7 @@ module.exports = {
 	connectUser: function (_pseudo, socket){
 		var pseudo = _pseudo;
 		connecte = true;
-		connectionState(connecte, pseudo);
+		module.exports.connectionState(connecte, pseudo);
 		socket.emit('connecte');
 		console.log(pseudo + " s'est connecté");
 	},
@@ -174,7 +174,7 @@ module.exports = {
 	onUserDisconnect: function (socket){
 		if(socket.nickname != null){
 			console.log('disconnect: ' + socket.nickname);
-			connectionState(false, socket.nickname);
+			module.exports.connectionState(false, socket.nickname);
 
 			for (var socketId in serverr.io.sockets.sockets) {
 				var pseudo = serverr.io.sockets.sockets[socketId].nickname;
