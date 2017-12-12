@@ -376,13 +376,15 @@ exports.buy_potion = function(req, res) {
 	var new_transaction = new Transaction(req.body);
 	new_transaction.pseudoSeller = 	req.params.avatarPseudo.toUpperCase();
 	var type = req.query.type.toUpperCase();
-	console.log(type);
+
 	if(type == 'MMO'){
 
 		var price = (new_transaction.potion1 * Prix.potionMMO1)+
 		(new_transaction.potion2 * Prix.potionMMO2)+
 		(new_transaction.potion3 * Prix.potionMMO3)+
 		(new_transaction.potion4 * Prix.potionMMO4);
+
+		
 
 		Avatar.findOneAndUpdate({pseudo: new_transaction.pseudoSeller, potionMMO1:{$gte: new_transaction.potion1}, potionMMO2:{$gte: new_transaction.potion2}, potionMMO3:{$gte: new_transaction.potion3}, potionMMO4:{$gte: new_transaction.potion4}},
 			{ $inc: { potionMMO1: (-1)*new_transaction.potion1,
@@ -416,7 +418,8 @@ exports.buy_potion = function(req, res) {
 									for (var socketId in serverr.io.sockets.sockets) {
 										var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 										if(pseudo == new_transaction.pseudoSeller){
-											serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+											serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience});
+											serverr.io.sockets.sockets[socketId].emit("onMessage", {message: "Vous avez vendu pour : " + price + " unités de potions!"});
 											getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
 										}
 									}
@@ -462,6 +465,7 @@ exports.buy_potion = function(req, res) {
 									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 									if(pseudo == new_transaction.pseudoSeller){
 										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+										serverr.io.sockets.sockets[socketId].emit("onMessage", {message: "Vous avez vendu pour : " + price + " unités de potions!"});
 										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
 									}
 								}
@@ -506,6 +510,7 @@ exports.buy_potion = function(req, res) {
 									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 									if(pseudo == new_transaction.pseudoSeller){
 										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience});
+										serverr.io.sockets.sockets[socketId].emit("onMessage", {message: "Vous avez vendu pour : " + price + " unités de potions!"});
 										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
 									}
 								}
