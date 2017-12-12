@@ -491,28 +491,30 @@ function createPopo(){
 
 	var textArea = document.getElementById("message");
 	
-	switch(bonusActif){
+	console.log("TEST du bonusActif: " + bonusActif);
+
+	switch(bonusActif){ 
 		
 		case("village1"):
-			if(array[index].contains("1")){ //double la potion si po1
+			if(array[index].indexOf("1") > -1){ //double la potion si po1
 				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
 				socket.emit(array[index]);
 			}
 			break;
 		case("village2"):
-			if(array[index].contains("2")){
+			if(array[index].indexOf("2") > -1){
 				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
 				socket.emit(array[index]);	
 			}
 			break;
 		case("village3"):
-			if(array[index].contains("3")){
+			if(array[index].indexOf("3") > -1){
 				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
 				socket.emit(array[index]);
 			}
 			break;
 		case("village4"):
-			if(array[index].contains("4")){
+			if(array[index].indexOf("4") > -1){
 				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
 				socket.emit(array[index]);
 			}

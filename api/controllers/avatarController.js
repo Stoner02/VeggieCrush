@@ -545,7 +545,7 @@ exports.get_bonus = function(req, res){
 					if(bonus == 'WOOD'){ 
 						for (var socketId in serverr.io.sockets.sockets) {
 							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-							if(pseudo == new_transaction.pseudoSeller){
+							if(pseudo == nomAvatar){
 								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village1'});
 							}
 						}
@@ -554,7 +554,7 @@ exports.get_bonus = function(req, res){
 					}else if(bonus == 'WATER'){
 						for (var socketId in serverr.io.sockets.sockets) {
 							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-							if(pseudo == new_transaction.pseudoSeller){
+							if(pseudo == nomAvatar){
 								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
 							}
 						}
@@ -563,8 +563,8 @@ exports.get_bonus = function(req, res){
 					}else if(bonus == 'STONE'){
 						for (var socketId in serverr.io.sockets.sockets) {
 							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-							if(pseudo == new_transaction.pseudoSeller){
-								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+							if(pseudo == nomAvatar){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village3'});
 							}
 						}
 						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
@@ -572,7 +572,7 @@ exports.get_bonus = function(req, res){
 					}else if(bonus == 'METAL'){
 						for (var socketId in serverr.io.sockets.sockets) {
 							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-							if(pseudo == new_transaction.pseudoSeller){
+							if(pseudo == nomAvatar){
 								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village4'});
 							}
 						}
@@ -584,7 +584,7 @@ exports.get_bonus = function(req, res){
 			}else if(type == 'RTS'){
 				for (var socketId in serverr.io.sockets.sockets) {
 					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-					if(pseudo == new_transaction.pseudoSeller){
+					if(pseudo == nomAvatar){
 						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'rts'});
 					}
 				}
@@ -592,7 +592,7 @@ exports.get_bonus = function(req, res){
 			}else if(type == 'MMO'){
 				for (var socketId in serverr.io.sockets.sockets) {
 					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-					if(pseudo == new_transaction.pseudoSeller){
+					if(pseudo == nomAvatar){
 						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'mmo'});
 					}
 				}
