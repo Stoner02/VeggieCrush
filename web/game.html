@@ -313,7 +313,7 @@ document.getElementById('shareBtn').onclick = function() {
 		//-------------------------------------
 		// Met à jour toutes les potions
 		//-------------------------------------
-		socket.on('receiveAllPopo', function (data) {
+		socket.on('receiveAllPopo', function (data) { console.log("receivePOPO");
 			document.getElementById("mmo1").innerHTML = data.mmo1;
 			document.getElementById("mmo2").innerHTML = data.mmo2;
 			document.getElementById("mmo3").innerHTML = data.mmo3;
@@ -437,6 +437,10 @@ document.getElementById('shareBtn').onclick = function() {
 		// Bonus
 		//-------------------------------------
 		socket.on('onBonus', function (data) {
+
+			setMaxIngre(100);
+			maxIngredient = 100;
+
 			var bonus = data.bonus;
 			bonusActif = bonus;
 			var textArea = document.getElementById("message");
@@ -456,9 +460,12 @@ document.getElementById('shareBtn').onclick = function() {
 					break;
 				case("mmo"):
 					textArea.value += "\n" + "Vous bénéficiez du bonus MMO!";
+					setMaxIngre(50);
+					maxIngredient = 50;
 					break;	
 				case("rts"):
 					textArea.value += "\n" + "Vous souffrez du malus RTS!";
+					socket.emit("resetPotions");
 					break
 			}
 		});

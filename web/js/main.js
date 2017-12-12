@@ -448,16 +448,6 @@ Main.prototype = {
 	},
 
 	createScore: function(){
-	/*
-		var me = this;
-		var scoreFont = "100px Arial";
-	//(Math.floor(me.tileGrid.length / 2) * me.tileWidth), me.tileGrid.length * me.tileHeight
-	//	console.log(me.tileGrid.length * me.tileHeight);
-		me.scoreLabel = me.game.add.text(500, 0, "0", {font: scoreFont, fill: "#fff"});
-		me.scoreLabel.anchor.setTo(0.5, 0);
-		me.scoreLabel.align = 'center';
-		*/
-
 		document.getElementById("ingreVal").innerHTML = "0";
 	},
 
@@ -494,7 +484,12 @@ function createPopo(){
 	console.log("TEST du bonusActif: " + bonusActif);
 
 	switch(bonusActif){ 
-		
+		case("rts"):
+			textArea.value += "\n" + "MALUS: Vous êtes dépouillez!";
+			break;
+		case("mmo"):
+			textArea.value += "\n" + "BONUS: Vous produisez plus rapidement!";
+			break;
 		case("village1"):
 			if(array[index].indexOf("1") > -1){ //double la potion si po1
 				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
@@ -519,6 +514,7 @@ function createPopo(){
 				socket.emit(array[index]);
 			}
 			break;
+		
 	}
 	
 };

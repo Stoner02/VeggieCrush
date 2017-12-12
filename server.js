@@ -41,8 +41,6 @@ var app2ServerStatic = serverStaticFunc.listen(8080, function () {
 
 
 
-
-
 var io = require("socket.io");
 var io = io.listen(app2ServerStatic);
 var Avatar = mongoose.model('Avatars');

@@ -113,6 +113,8 @@ serverr.io.sockets.on('connection', function (socket) {
     socket.on('addPotionVille4', function () {
         potionsServices.onAddPotionVille4(socket);
     });
-
+    socket.on('resetPotions', function () {
+        potionsServices.resetPotion(socket);
+    });
 
 });
