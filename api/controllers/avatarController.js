@@ -91,7 +91,8 @@ exports.create_an_avatar = function(req, res) {
 
 
 exports.read_an_avatar = function(req, res) {
-	Avatar.findById(req.params.avatarId, function(err, Avatar) {
+	var nomAvatar = req.params.avatarId.toUpperCase();
+	Avatar.findOne({'pseudo': nomAvatar}, function (err, Avatar) {
     if (err){
 		res.send(err);
 	}else if(Avatar == null){
@@ -184,7 +185,6 @@ exports.new_user = function(req, res) {
 		  new_avatar.mdp = req.body.psswd;
 		  new_avatar.argent = req.body.argent;
 		  var lol = moment(req.body.date, 'DD/MM/YY HH:mm:ss', true).format();
-		  console.log(""+lol);
 		  new_avatar.dateArgent = Date.parse(moment(req.body.date, 'DD/MM/YY HH:mm:ss', true).format());
 		  new_avatar.coordx = 0;
 		  new_avatar.coordy = 0;
@@ -207,7 +207,7 @@ exports.new_user = function(req, res) {
 			if (err){
 				res.send(err);
 			}else{
-				res.status(200).json({ message: 'ok' });
+				res.status(200).json({ message: 'Compte enregistré' });
 			}
 		  });
 		}
@@ -304,10 +304,79 @@ exports.get_potions = function(req, res){
   });	
 }
 
+exports.get_potions_type = function(req, res){
+	var type = req.query.type.toUpperCase();
+	Avatar.find({'connecte': true,}, function (err, Avatar) {
+    if (err)
+		res.send(err);
+	if(Avatar == null){
+		res.status(404).json({ message: 'Pseudo introuvable' });
+	}
+	else{
+		var obj = {
+			avatars: []
+		};
+		if(type == 'VILLAGE'){	
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionVille1;
+				pot.potion2 = av.potionVille2;
+				pot.potion3 = av.potionVille3;
+				pot.potion4 = av.potionVille4;
+				pot.potion1_prix = Prix.potionVille1;
+				pot.potion2_prix = Prix.potionVille2;		
+				pot.potion3_prix = Prix.potionVille3;
+				pot.potion4_prix = Prix.potionVille4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+		}else if(type == 'RTS'){		
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionRTS1;
+				pot.potion2 = av.potionRTS2;
+				pot.potion3 = av.potionRTS3;
+				pot.potion4 = av.potionRTS4;
+				pot.potion1_prix = Prix.potionRTS1;
+				pot.potion2_prix = Prix.potionRTS2;		
+				pot.potion3_prix = Prix.potionRTS3;
+				pot.potion4_prix = Prix.potionRTS4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+			
+		}else if(type == 'MMO'){
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionMMO1;
+				pot.potion2 = av.potionMMO2;
+				pot.potion3 = av.potionMMO3;
+				pot.potion4 = av.potionMMO4;
+				pot.potion1_prix = Prix.potionMMO1;
+				pot.potion2_prix = Prix.potionMMO2;		
+				pot.potion3_prix = Prix.potionMMO3;
+				pot.potion4_prix = Prix.potionMMO4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+		}else{
+			res.status(422).json({ message: 'Contenu du filtre incorrect' });
+		}
+	}
+  });	
+}
+
 exports.buy_potion = function(req, res) {
 	var new_transaction = new Transaction(req.body);
 	new_transaction.pseudoSeller = 	req.params.avatarPseudo.toUpperCase();
 	var type = req.query.type.toUpperCase();
+	console.log(type);
 	if(type == 'MMO'){
 
 		var price = (new_transaction.potion1 * Prix.potionMMO1)+
@@ -436,7 +505,7 @@ exports.buy_potion = function(req, res) {
 								for (var socketId in serverr.io.sockets.sockets) {
 									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 									if(pseudo == new_transaction.pseudoSeller){
-										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience});
 										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
 									}
 								}
@@ -461,6 +530,78 @@ exports.check_login = function(req, res){
 			}
 		});	
 		
+}
+
+exports.get_bonus = function(req, res){
+	var nomAvatar = req.params.avatarPseudo.toUpperCase();
+	var type = req.query.type.toUpperCase();
+	Avatar.findOne({'pseudo': nomAvatar, 'connecte' : true}, function(err, Av) {
+		if(Av == null){
+			res.status(404).json('Pseudo introuvable');
+		}else{
+			if(type == 'VILLAGE'){
+				if(req.body.bonus != null){
+					var bonus = req.body.bonus.toUpperCase();
+					if(bonus == 'WOOD'){ 
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village1'});
+							}
+						}
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'WATER'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+							}
+						}
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'STONE'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+							}
+						}
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'METAL'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village4'});
+							}
+						}
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+					}
+				}else{
+					res.status(404).json('Bonus de village inconnu');
+				}
+			}else if(type == 'RTS'){
+				for (var socketId in serverr.io.sockets.sockets) {
+					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+					if(pseudo == new_transaction.pseudoSeller){
+						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'rts'});
+					}
+				}
+				res.status(200).json('Bonus RTS obtenu');
+			}else if(type == 'MMO'){
+				for (var socketId in serverr.io.sockets.sockets) {
+					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+					if(pseudo == new_transaction.pseudoSeller){
+						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'mmo'});
+					}
+				}
+				res.status(200).json('Bonus MMO obtenu');
+			}else{
+				res.status(404).json('Jeu inconnu');
+			}
+		}
+	});	
 }
 
 function getAllPopo(socket, pseudosocket) {
