@@ -177,7 +177,7 @@ exports.new_user = function(req, res) {
 		res.send(err)
 	}
 	else if(Ava != null){
-		res.status(404).json({ message: 'Compte existe déjà' });
+		res.status(403).json({ message: 'Compte existe déjà' });
 	}
 	else{	
 		  var new_avatar = new Avatar();
