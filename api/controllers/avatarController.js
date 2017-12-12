@@ -506,7 +506,7 @@ exports.buy_potion = function(req, res) {
 								for (var socketId in serverr.io.sockets.sockets) {
 									var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 									if(pseudo == new_transaction.pseudoSeller){
-										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+										serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience});
 										getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
 									}
 								}
@@ -530,6 +530,81 @@ exports.check_login = function(req, res){
 
 			}
 		});	
+		
+}
+
+exports.get_bonus = function(req, res){
+	var nomAvatar = req.params.avatarPseudo.toUpperCase();
+	var type = req.query.type.toUpperCase();
+	Avatar.findOne({'pseudo': nomAvatar, 'connecte' : true}, function(err, Av) {
+		if(Av == null){
+			res.status(404).json('Pseudo introuvable');
+		}else{
+			if(type == 'VILLAGE'){
+				var bonus = req.body.bonus.toUpperCase();
+				if(bonus == 'WOOD'){ 
+					console.log('ici WOOD');
+					for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village1'});
+						}
+					}
+				}else if(bonus == 'WATER'){
+					for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+						}
+					}
+					
+				}else if(bonus == 'STONE'){
+					for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+						}
+					}
+					
+				}else if(bonus == 'METAL'){
+					for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village4'});
+						}
+					}
+					
+				}
+			}else if(type == 'RTS'){
+				for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'rts'});
+						}
+					}
+				
+			}else if(type == 'MMO'){
+				for (var socketId in serverr.io.sockets.sockets) {
+						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+						if(pseudo == new_transaction.pseudoSeller){
+							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'mmo'});
+						}
+					}
+			}
+			res.status(200).json();
+		}
+	});	
+		
+	//----------------------
+	// Find socket of the client. Update argent, exp et tableau popo
+	//----------------------
+	for (var socketId in serverr.io.sockets.sockets) {
+		var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+		if(pseudo == new_transaction.pseudoSeller){
+			serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
+			getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
+		}
+	}
 		
 }
 

@@ -25,7 +25,7 @@ module.exports = function(app) {
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/checkPseudo
 		.get(avatar.check_pseudo)
 	
-	app.route('/avatars/:avatarPseudo/argent').
+	app.route('/avatars/:avatarPseudo/argent')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/argent
 		.get(avatar.check_argent)
 	
@@ -51,6 +51,9 @@ module.exports = function(app) {
 	app.route('/avatars/:avatarPseudo/transaction')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot/transaction/?type=RTS
 		.put(avatar.buy_potion)
+		
+	app.route('/avatars/:avatarPseudo/bonus')
+		.put(avatar.get_bonus)
 			
 		
 };
