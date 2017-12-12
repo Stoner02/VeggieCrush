@@ -91,7 +91,8 @@ exports.create_an_avatar = function(req, res) {
 
 
 exports.read_an_avatar = function(req, res) {
-	Avatar.findById(req.params.avatarId, function(err, Avatar) {
+	var nomAvatar = req.params.avatarId.toUpperCase();
+	Avatar.findOne({'pseudo': nomAvatar}, function (err, Avatar) {
     if (err){
 		res.send(err);
 	}else if(Avatar == null){
@@ -304,10 +305,79 @@ exports.get_potions = function(req, res){
   });	
 }
 
+exports.get_potions_type = function(req, res){
+	var type = req.query.type.toUpperCase();
+	Avatar.find({'connecte': true,}, function (err, Avatar) {
+    if (err)
+		res.send(err);
+	if(Avatar == null){
+		res.status(404).json({ message: 'Pseudo introuvable' });
+	}
+	else{
+		var obj = {
+			avatars: []
+		};
+		if(type == 'VILLAGE'){	
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionVille1;
+				pot.potion2 = av.potionVille2;
+				pot.potion3 = av.potionVille3;
+				pot.potion4 = av.potionVille4;
+				pot.potion1_prix = Prix.potionVille1;
+				pot.potion2_prix = Prix.potionVille2;		
+				pot.potion3_prix = Prix.potionVille3;
+				pot.potion4_prix = Prix.potionVille4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+		}else if(type == 'RTS'){		
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionRTS1;
+				pot.potion2 = av.potionRTS2;
+				pot.potion3 = av.potionRTS3;
+				pot.potion4 = av.potionRTS4;
+				pot.potion1_prix = Prix.potionRTS1;
+				pot.potion2_prix = Prix.potionRTS2;		
+				pot.potion3_prix = Prix.potionRTS3;
+				pot.potion4_prix = Prix.potionRTS4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+			
+		}else if(type == 'MMO'){
+			Avatar.forEach(function(av){
+				var pot = new Potion();
+				pot.pseudo = av.pseudo;
+				pot.potion1 = av.potionMMO1;
+				pot.potion2 = av.potionMMO2;
+				pot.potion3 = av.potionMMO3;
+				pot.potion4 = av.potionMMO4;
+				pot.potion1_prix = Prix.potionMMO1;
+				pot.potion2_prix = Prix.potionMMO2;		
+				pot.potion3_prix = Prix.potionMMO3;
+				pot.potion4_prix = Prix.potionMMO4;				
+				obj.avatars.push(pot);
+			});
+			
+			res.status(200).json(obj);
+		}else{
+			res.status(422).json({ message: 'Contenu du filtre incorrect' });
+		}
+	}
+  });	
+}
+
 exports.buy_potion = function(req, res) {
 	var new_transaction = new Transaction(req.body);
 	new_transaction.pseudoSeller = 	req.params.avatarPseudo.toUpperCase();
 	var type = req.query.type.toUpperCase();
+	console.log(type);
 	if(type == 'MMO'){
 
 		var price = (new_transaction.potion1 * Prix.potionMMO1)+
