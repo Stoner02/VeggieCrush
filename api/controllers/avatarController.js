@@ -541,71 +541,68 @@ exports.get_bonus = function(req, res){
 			res.status(404).json('Pseudo introuvable');
 		}else{
 			if(type == 'VILLAGE'){
-				var bonus = req.body.bonus.toUpperCase();
-				if(bonus == 'WOOD'){ 
-					console.log('ici WOOD');
-					for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village1'});
+				if(req.body.bonus != null){
+					var bonus = req.body.bonus.toUpperCase();
+					if(bonus == 'WOOD'){ 
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village1'});
+							}
 						}
-					}
-				}else if(bonus == 'WATER'){
-					for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'WATER'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+							}
 						}
-					}
-					
-				}else if(bonus == 'STONE'){
-					for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'STONE'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village2'});
+							}
 						}
-					}
-					
-				}else if(bonus == 'METAL'){
-					for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village4'});
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
+						
+					}else if(bonus == 'METAL'){
+						for (var socketId in serverr.io.sockets.sockets) {
+							var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+							if(pseudo == new_transaction.pseudoSeller){
+								serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'village4'});
+							}
 						}
+						res.status(200).json('Bonus Village ' + bonus + ' obtenu');	
 					}
-					
+				}else{
+					res.status(404).json('Bonus de village inconnu');
 				}
 			}else if(type == 'RTS'){
 				for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'rts'});
-						}
+					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+					if(pseudo == new_transaction.pseudoSeller){
+						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'rts'});
 					}
-				
+				}
+				res.status(200).json('Bonus RTS obtenu');
 			}else if(type == 'MMO'){
 				for (var socketId in serverr.io.sockets.sockets) {
-						var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-						if(pseudo == new_transaction.pseudoSeller){
-							serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'mmo'});
-						}
+					var pseudo = serverr.io.sockets.sockets[socketId].nickname;
+					if(pseudo == new_transaction.pseudoSeller){
+						serverr.io.sockets.sockets[socketId].emit("onBonus", {bonus: 'mmo'});
 					}
+				}
+				res.status(200).json('Bonus MMO obtenu');
+			}else{
+				res.status(404).json('Jeu inconnu');
 			}
-			res.status(200).json();
 		}
 	});	
-		
-	//----------------------
-	// Find socket of the client. Update argent, exp et tableau popo
-	//----------------------
-	for (var socketId in serverr.io.sockets.sockets) {
-		var pseudo = serverr.io.sockets.sockets[socketId].nickname;
-		if(pseudo == new_transaction.pseudoSeller){
-			serverr.io.sockets.sockets[socketId].emit("updateExperienceArgent", {argent: Av.argent, exp: Av.experience})
-			getAllPopo(serverr.io.sockets.sockets[socketId], pseudo);
-		}
-	}
-		
 }
 
 function getAllPopo(socket, pseudosocket) {

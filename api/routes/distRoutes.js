@@ -53,6 +53,7 @@ module.exports = function(app) {
 		.put(avatar.buy_potion)
 		
 	app.route('/avatars/:avatarPseudo/bonus')
+		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/bonus/?type=rts
 		.put(avatar.get_bonus)
 			
 		
