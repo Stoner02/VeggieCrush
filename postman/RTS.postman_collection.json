@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Check login et modt de passe",
+			"name": "Check login et mot de passe",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -719,6 +719,158 @@
 							"value": "RTS",
 							"equals": true
 						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT bonus avec filtre de jeu",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "bonus",
+							"value": "wood",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/bonus/?type=rts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"bonus",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "rts",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Enregistrer utilisateur",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "pseudo",
+							"value": "TEestB",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "psswd",
+							"value": "4569",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "argent",
+							"value": "4000",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "date",
+							"value": "12/12/17 12:12:12",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/newUser/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"newUser",
+						""
 					]
 				},
 				"description": ""

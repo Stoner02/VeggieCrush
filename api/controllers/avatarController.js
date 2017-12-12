@@ -185,7 +185,6 @@ exports.new_user = function(req, res) {
 		  new_avatar.mdp = req.body.psswd;
 		  new_avatar.argent = req.body.argent;
 		  var lol = moment(req.body.date, 'DD/MM/YY HH:mm:ss', true).format();
-		  console.log(""+lol);
 		  new_avatar.dateArgent = Date.parse(moment(req.body.date, 'DD/MM/YY HH:mm:ss', true).format());
 		  new_avatar.coordx = 0;
 		  new_avatar.coordy = 0;
@@ -208,7 +207,7 @@ exports.new_user = function(req, res) {
 			if (err){
 				res.send(err);
 			}else{
-				res.status(200).json({ message: 'ok' });
+				res.status(200).json({ message: 'Compte enregistré' });
 			}
 		  });
 		}

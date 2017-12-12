@@ -30,6 +30,7 @@ module.exports = function(app) {
 		.get(avatar.check_argent)
 	
 	app.route('/avatars/newuser')
+		// EXEMPLE: http://localhost:3000/avatars/newUser/
 		.post(avatar.new_user)
 	
 	app.route('/avatars/:avatarPseudo/connecte')
