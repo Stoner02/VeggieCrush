@@ -4,6 +4,8 @@ var request         = serverr.request;
 
 module.exports = {
 
+    villagePosition:  villagePosition = "",
+
     //----------------------------------
     // Update bonus
     //----------------------------------
@@ -47,6 +49,7 @@ module.exports = {
 
             //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
 
+            module.exports.villagePosition = "";
         }
     },
 
@@ -58,7 +61,7 @@ module.exports = {
         
         if(village != null){
             console.log(socket.nickname + ' rentre dans le village: ' + village);
-
+            villagePosition = village;
             //TODO PREVENIR PAR POST QU'ON ENTRE DANS LE VILLAGE
             /*
             request.post({url:'https://10.113.51.26:3000/farmvillage/api/towns/'+ village +'/potions',
@@ -100,12 +103,17 @@ module.exports = {
     onUpdateBg: function (data, socket){
         var bg = data.bg;
         
+
         if(bg != null){
             console.log(socket.nickname + ' rentre dans le BG: ' + bg);
             
             //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
             //TODO: POST AU BG DIRE QU'ON EST LA
+
+            module.exports.villagePosition = "";
         }
+
+        
     },
 
     emitGetBg: function (socket){

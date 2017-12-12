@@ -161,7 +161,8 @@ module.exports = {
 		//-------------------------------------
 		// Vérifier si connecté ailleurs
 		//-------------------------------------
-	/*	request('?????????????????'+ pseudo, function (error, response, body) {
+		/*
+		request('?????????????????'+ pseudo, function (error, response, body) {
 			// Déjà connecté chez MMO
 			if (response != null && response.statusCode == 200) {
 				alreadyCon = true;
