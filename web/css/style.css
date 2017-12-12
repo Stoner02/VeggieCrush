@@ -1,0 +1,82 @@
+
+@font-face 
+{
+font-family: "pixel_police";
+src: url("police/visitor1.ttf");
+}
+
+
+
+html{
+    /* margin: 0; */
+    font-family: "pixel_police" !important;
+    
+}
+
+table td {
+    font-weight:bold;
+    font-size: x-large; 
+}
+
+.padding-0{
+    padding-right:0;
+    padding-left:0;
+}
+
+body{
+    background-color: rgba(128, 128, 128, 0.746);
+    /* background-image: url("../assets/background/alchimist.jpg"); */
+    font-family: "pixel_police" !important;
+}
+
+.classWithPad-top { 
+    /* margin:10px;  */
+    padding-top:30px; 
+}
+.classWithPad-top-table { 
+    /* margin:10px;  */
+    padding-top:250px; 
+}
+
+.no-margin
+{
+  margin: 0px !important;
+}
+
+#plateauJeu{
+    width: 100%;
+}
+
+#game-container{
+    width: 600px;
+    height: 600px;
+    padding: 0;
+    margin: auto;
+    border: red solid 1px;
+}
+
+#message{
+    background-color: #a0a6a1;
+    margin: auto;
+    height: 260px;
+    width: 600px;
+    text-align: center;
+    /* background-color: grey; */
+}
+
+/* .padding-0{
+    padding-right:0 !important;
+    padding-left:0 !important;
+    margin: 0px !important;
+} */
+
+/* no-gutters Class Rules */
+.row.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+ }
+ .row.no-gutters > [class^="col-"],
+ .row.no-gutters > [class*=" col-"] {
+    padding-right: 0;
+    padding-left: 0;
+ }

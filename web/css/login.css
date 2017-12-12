@@ -9,7 +9,7 @@ html {
 body {
     display: table-cell;
     vertical-align: middle;
-    background-image: url("alchimist.jpg");
+    background-image: url("../assets/background/alchimist.jpg");
     /* Full height */
     height: 100%;
 
