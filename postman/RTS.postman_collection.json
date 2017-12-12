@@ -1,0 +1,729 @@
+{
+	"info": {
+		"name": "RTS",
+		"_postman_id": "1f4e4aa8-4af4-daa7-507a-967642ef83a5",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check login et modt de passe",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/login/Azhenot38/?mdp=12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"login",
+						"Azhenot38",
+						""
+					],
+					"query": [
+						{
+							"key": "mdp",
+							"value": "12345",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Recevoir tous les avatars et toute sles informations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"all"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get infos d'un pseudo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot",
+						"profile"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check si pseudo dispo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/checkPseudo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"checkPseudo"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get argent d'un pseudo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/argent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"argent"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get connecte d'un pseudo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/connecte",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"connecte"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get coordonnées de tous les avatars",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/coords",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"coords"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get potions d'un pseudo avec filtre de jeu",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/potions/?type=RTS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"potions",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "RTS",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get potions de tous les avatars avec filtre de jeu",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/potions/?type=RTS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"potions",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "RTS",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put transaction avec filtre de jeu",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "potion1",
+							"value": "5",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion2",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion3",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "potion4",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "pseudoBuyer",
+							"value": "lolo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "RTS",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot/transaction/?type=RTS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot",
+						"transaction",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "RTS",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
