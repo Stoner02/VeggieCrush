@@ -141,7 +141,7 @@ document.getElementById('shareBtn').onclick = function() {
 							<!-- Ingrédients -->
 							<!-- *********************** -->
 							<div id="ingredient">
-								<h2>Ingrédients : <span id="ingreVal"></span></h2>
+								<h2>Ingrédients : <span id="ingreVal"></span> / <span id="maxIngre"></span></h2>
 							</div>
 		
 						<div class="col classWithPad-top-table">
@@ -178,8 +178,8 @@ document.getElementById('shareBtn').onclick = function() {
 		
 		<div class="order-1 col-xs-6 col-md-4" style="background-color: #6A5A32 ;">
 			<div id="game-container"></div>
-			<div class="row" >
-						<div id="message"><p>Vous venez de vendre une potion du chat.</p></div>
+			<div class="row">
+						<div><textarea id="message"></textarea></div>
 			</div>	
 		</div> 
 		 
@@ -282,6 +282,8 @@ document.getElementById('shareBtn').onclick = function() {
 	<script type="text/javascript" src="js/node_modules/socket.io-client/dist/socket.io.js"></script>
 	<script type="text/javascript">
 
+		setMaxIngre(100);
+
 		var socket = io.connect();
 
 		var pseudo = getUrlParameter('pseudo');
@@ -296,27 +298,6 @@ document.getElementById('shareBtn').onclick = function() {
 			}
 			else{ 
 				console.log("AUTORISATION OK");
-				/*
-				//-------------------------------------
-				// Récupérer toutes les potions
-				//-------------------------------------
-				socket.emit('getAllPopo');
-				//-------------------------------------
-				// Récupérer l'argent/exp
-				//-------------------------------------
-				socket.emit('getMoneyExp');
-				//-------------------------------------
-				// Récupérer la position du joueur
-				//-------------------------------------
-				socket.emit('getCoord');
-				//-------------------------------------
-				// Récupérer tous les villages
-				//-------------------------------------
-				socket.emit('getVillages');
-				//-------------------------------------
-				// Récupérer tous les bg
-				//-------------------------------------
-				socket.emit('getBg'); */
 			}
 		});
 
@@ -451,7 +432,43 @@ document.getElementById('shareBtn').onclick = function() {
 		socket.on('erreurConnexion', function (data) {
 			console.log("Erreur connexion.");
 		});
+
+		//-------------------------------------
+		// Bonus
+		//-------------------------------------
+		socket.on('onBonus', function (data) {
+			var bonus = data.bonus;
+			bonusActif = bonus;
+			var textArea = document.getElementById("message");
+
+			switch(bonus){
+				case("village1"):
+					textArea.value += "\n" + "Vous bénéficiez du bonus VILLAGE1!";
+					break;
+				case("village2"):
+					textArea.value += "\n" + "Vous bénéficiez du bonus VILLAGE2!";
+					break;
+				case("village3"):
+					textArea.value += "\n" + "Vous bénéficiez du bonus VILLAGE3!";
+					break;
+				case("village4"):
+					textArea.value += "\n" + "Vous bénéficiez du bonus VILLAGE4!";
+					break;
+				case("mmo"):
+					textArea.value += "\n" + "Vous bénéficiez du bonus MMO!";
+					break;	
+				case("rts"):
+					textArea.value += "\n" + "Vous souffrez du malus RTS!";
+					break
+			}
+		});
 		
+
+		socket.on('onMessage', function (data) {
+			var mess = data.message;
+			var textArea = document.getElementById("message");
+			textArea.value += "\n" + mess;
+		});
 
 		document.getElementById('shareBtn').onclick = function() {
 		  FB.ui({
@@ -462,6 +479,10 @@ document.getElementById('shareBtn').onclick = function() {
 		  }, function(response){});
 		}
 
+
+		function setMaxIngre(maxIngre){
+			document.getElementById("maxIngre").innerHTML = maxIngre;
+		}
 	
 	</script>
 

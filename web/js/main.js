@@ -1,5 +1,7 @@
 var Main = function(game){};
 
+var maxIngredient = 100;
+
 Main.prototype = {
 
 	create: function() {
@@ -463,8 +465,8 @@ Main.prototype = {
 	
 		var me = this;
 		me.score += 10;  
-		if(me.score >= 100){
-			me.score -= 100;  
+		if(me.score >= maxIngredient){
+			me.score -= maxIngredient;  
 			createPopo();
 		}  
 		document.getElementById("ingreVal").innerHTML = me.score;  
@@ -472,10 +474,12 @@ Main.prototype = {
 
 	gameOver: function(){
 		this.game.state.start('GameOver');
-	}
+	},
 
-
+	bonusActif: bonusActif = ""
 };
+
+
 
 function createPopo(){
 	var array = ['addPotionMMO1', 'addPotionMMO2', 'addPotionMMO3', 'addPotionMMO4',
@@ -484,4 +488,35 @@ function createPopo(){
 	var index = Math.floor((Math.random() * array.length) + 0);	
 	console.log("CREATION " + array[index]);
 	socket.emit(array[index]);	
+
+	var textArea = document.getElementById("message");
+	
+	switch(bonusActif){
+		
+		case("village1"):
+			if(array[index].contains("1")){ //double la potion si po1
+				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
+				socket.emit(array[index]);
+			}
+			break;
+		case("village2"):
+			if(array[index].contains("2")){
+				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
+				socket.emit(array[index]);	
+			}
+			break;
+		case("village3"):
+			if(array[index].contains("3")){
+				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
+				socket.emit(array[index]);
+			}
+			break;
+		case("village4"):
+			if(array[index].contains("4")){
+				textArea.value += "\n" + "BONUS: Vous doublez votre potion !";
+				socket.emit(array[index]);
+			}
+			break;
+	}
+	
 };

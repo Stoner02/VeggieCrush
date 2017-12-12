@@ -32,14 +32,19 @@ console.log('todo list RESTful API server started on: ' + port);
 var http = require('http');
 var connect = require('connect');
 var serveStatic = require('serve-static');
-var app2Func = connect().use(serveStatic(__dirname + '/web/'));
-var app2 = app2Func.listen(8080, function () {
+
+var serverStaticFunc = connect().use(serveStatic(__dirname + '/web/'));
+
+var app2ServerStatic = serverStaticFunc.listen(8080, function () {
 	console.log('Server running on 8080...');
 });
 
 
+
+
+
 var io = require("socket.io");
-var io = io.listen(app2);
+var io = io.listen(app2ServerStatic);
 var Avatar = mongoose.model('Avatars');
 
 

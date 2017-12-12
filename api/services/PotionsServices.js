@@ -38,24 +38,28 @@ module.exports = {
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionMMO1: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionMMO1" });
     },
     onAddPotionMMO2: function (socket){
         console.log('ajout potion MMO');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionMMO2: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionMMO2" });
     },
     onAddPotionMMO3: function (socket){
         console.log('ajout potion MMO');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionMMO3: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionMMO3" });
     },
     onAddPotionMMO4: function (socket){
         console.log('ajout potion MMO');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionMMO4: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionMMO4" });
     },
 
     
@@ -64,24 +68,28 @@ module.exports = {
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionRTS1: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionRTS1" });
     },
     onAddPotionRTS2: function (socket){
         console.log('ajout potion RTS');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionRTS2: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionRTS2" });
     },
     onAddPotionRTS3: function (socket){
         console.log('ajout potion RTS');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionRTS3: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionRTS3" });
     },
     onAddPotionRTS4: function (socket){
         console.log('ajout potion RTS');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionRTS: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionRTS4" });
     },
 
 
@@ -90,24 +98,28 @@ module.exports = {
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionVille1: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionVille1" });
     },
     onAddPotionVille2: function (socket){
         console.log('ajout potion Ville');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionVille2: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionVille2" });
     },
     onAddPotionVille3: function (socket){
         console.log('ajout potion Ville');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionVille3: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionVille3" });
     },
     onAddPotionVille4: function (socket){
         console.log('ajout potion Ville');
         Avatar.findOneAndUpdate({ pseudo: socket.nickname },
             { $inc: { potionVille: 1 } }, { new: true }, function (err, Av) {});
             this.getAllPopo(socket);
+            socket.emit("onMessage", {message: "Création potionVille4" });
     }
 
 };

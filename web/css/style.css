@@ -5,7 +5,10 @@ font-family: "pixel_police";
 src: url("police/visitor1.ttf");
 }
 
-
+#message{
+    width: 100%;
+    height: 100%;
+}
 
 html{
     /* margin: 0; */
