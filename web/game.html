@@ -243,7 +243,7 @@ document.getElementById('shareBtn').onclick = function() {
 										</div>
 
 										<div class="col-2">
-											<button type="button" class="btn btn-primary" onclick="changePosition()">GO</button>
+											<button type="button" class="btn btn-primary" onclick="changeVillage()">GO</button>
 											<!-- <input value="Go" onclick="changeBg()"> -->
 										</div>
 										<!-- <button type="button" class="btn btn-primary" onclick="changePosition()">GO</button> -->
@@ -262,7 +262,7 @@ document.getElementById('shareBtn').onclick = function() {
 											</select>
 										</div>
 										<div class="col-2">
-											<button type="button" class="btn btn-primary" onclick="changePosition()">GO</button>
+											<button type="button" class="btn btn-primary" onclick="changeBg()">GO</button>
 											<!-- <input value="Go" onclick="changeBg()"> -->
 										</div>
 									</div>
@@ -280,6 +280,7 @@ document.getElementById('shareBtn').onclick = function() {
 
 	<!-- BEGIN JAVASCRIPT -->
 	<script type="text/javascript" src="js/node_modules/socket.io-client/dist/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript">
 
 		setMaxIngre(100);
@@ -333,7 +334,7 @@ document.getElementById('shareBtn').onclick = function() {
 		//-------------------------------------
 		// Met à jour les villages
 		//-------------------------------------
-		socket.on('receiveVillages', function (data) {
+		socket.on('receiveVillages', function (data) { console.log("receiveVillages");
 
 			var array = data.villages;
 			var villageSelect = document.getElementById('villageSelect');
@@ -380,7 +381,7 @@ document.getElementById('shareBtn').onclick = function() {
 		//-------------------------------------
 		// Prévient changement village
 		//-------------------------------------
-		function changeVillage(){
+		function changeVillage(){ console.log("ICI");
 			var villageSelected = $("#villageSelect option:selected").text();
 			socket.emit("updateVillage", {village: villageSelected});
 			document.getElementById("valPosition").innerHTML = villageSelected + " (Village)";
@@ -389,7 +390,7 @@ document.getElementById('shareBtn').onclick = function() {
 		//-------------------------------------
 		// Prévient changement bg
 		//-------------------------------------
-		function changeBg(){
+		function changeBg(){ console.log("ICI");
 			var bgSelected = $("#bgSelect option:selected").text();
 			socket.emit("updateBg", {bg: bgSelected});
 			document.getElementById("valPosition").innerHTML = bgSelected + " (BG)";

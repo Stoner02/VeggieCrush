@@ -156,10 +156,41 @@ module.exports = {
 		
 	connectUser: function (_pseudo, socket){
 		var pseudo = _pseudo;
-		connecte = true;
-		module.exports.connectionState(connecte, pseudo);
-		socket.emit('connecte');
-		console.log(pseudo + " s'est connecté");
+		var alreadyCon = false;
+
+		//-------------------------------------
+		// Vérifier si connecté ailleurs
+		//-------------------------------------
+	/*	request('?????????????????'+ pseudo, function (error, response, body) {
+			// Déjà connecté chez MMO
+			if (response != null && response.statusCode == 200) {
+				alreadyCon = true;
+			}
+			request('???????????????????????/'+ pseudo, function (error, response, body) {
+				// Déjà inscrit chez RTS
+				if (response.statusCode == 200) {
+					alreadyCon = true;
+				}
+				request('???????????????????????/'+ pseudo, function (error, response, body) {
+					// Déjà inscrit chez Farmville
+					if (response.statusCode == 200) {
+						alreadyCon = true;
+					}
+				});
+			});
+			*/
+
+		if(!alreadyCon)	{
+			connecte = true;
+			module.exports.connectionState(connecte, pseudo);
+			socket.emit('connecte');
+			console.log(pseudo + " s'est connecté");
+		}
+		else{
+			socket.emit("erreurConnexion", "Déjà connecté sur un autre jeu.");
+		}
+
+		
 	},
 
 	//----------------------------------------

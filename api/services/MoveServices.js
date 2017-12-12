@@ -1,7 +1,9 @@
 var serverr         = require('../../server');
 var Avatar          = serverr.Avatar;
+var request         = serverr.request;
 
 module.exports = {
+
     //----------------------------------
     // Update bonus
     //----------------------------------
@@ -40,26 +42,31 @@ module.exports = {
         if(x >= 0 && y >= 0){
             console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
             this.setCoord(x, y, socket);
-            //TODO PREVENIR TOUT LE MONDE DU CHANGEMENT DE POSITION
 
-            //TODO updateBonus si besoin
+            //TODO PREVENIR MMO DU CHANGEMENT DE POSITION
 
-            //TODO regarder si on est dans un village ou un BG
+            //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
+
         }
     },
 
     //----------------------------------
     // RENTRER DANS VILLAGE
     //----------------------------------
-    onUpdateVillage: function (data, socket){
+    onUpdateVillage: function (data, socket){ console.log("change village");
         var village = data.village;
         
         if(village != null){
             console.log(socket.nickname + ' rentre dans le village: ' + village);
-            
-            //TODO récupérer les coordonnées du village et setCoord(x,y)
 
-            //TODO updateBonus si besoin
+            //TODO PREVENIR PAR POST QU'ON ENTRE DANS LE VILLAGE
+            /*
+            request.post({url:'https://10.113.51.26:3000/farmvillage/api/towns/'+ village +'/potions',
+                         form: {key:'value'}}, function(err,httpResponse,body){
+                 
+            })
+    
+            */
         }
     },
 
@@ -68,8 +75,23 @@ module.exports = {
     //----------------------------------
     emitGetVillage: function (socket){
         //TODO RECUPERER LES VILLAGES
-        var arrayVillages = ["Dalaran", "Orgrimar", "Stormwind"];
-        socket.emit("receiveVillages", {villages: arrayVillages});
+
+        var arrayVillage = ["Orgrimar", "Dalaran", "Fossoyeuse"];
+        socket.emit("receiveVillages", {villages: arrayVillage});
+       /*
+        request('https://10.113.51.26:3000/farmvillage/api/towns', function (error, response, body) {
+            
+            var arrayBg = ["Tarides", "Dorotar", "MorteMine"];
+
+            if (response != null && response.statusCode == 200) {
+                arrayBg = body.TownName;
+                console.log("les villages: " + arrayBg);
+            }
+
+            socket.emit("receiveBg", {bg: arrayBg});
+        });
+        */
+
     },
 
     //----------------------------------
@@ -81,14 +103,14 @@ module.exports = {
         if(bg != null){
             console.log(socket.nickname + ' rentre dans le BG: ' + bg);
             
-            //TODO récupérer les coordonnées du village et setCoord(x,y)
-
-            //TODO updateBonus si besoin
+            //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
+            //TODO: POST AU BG DIRE QU'ON EST LA
         }
     },
 
     emitGetBg: function (socket){
         //TODO RECUPERER LES BG
+
         var arrayBg = ["Tarides", "Dorotar", "MorteMine"];
         socket.emit("receiveBg", {bg: arrayBg});
     },
