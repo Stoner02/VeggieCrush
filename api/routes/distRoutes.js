@@ -6,22 +6,27 @@ module.exports = function(app) {
 	// -----------------------------------
 	// avatar Routes
 	// -----------------------------------
-	app.route('/avatar/:avatarPseudo')
+	app.route('/avatars/login/:avatarPseudo')
+		// EXEMPLE: http://localhost:3000/avatars/login/Azhenot38/?mdp=12345
 		.get(avatar.check_login)
 		
-	app.route('/avatars')
+	app.route('/avatars/all')
+		// EXEMPLE: http://localhost:3000/avatars/all
 		.get(avatar.list_all_avatars)
 		.post(avatar.create_an_avatar);
 
-	app.route('/avatar/:avatarId')
+	app.route('/avatars/:avatarId/profile')
+		// EXEMPLE: http://localhost:3000/avatars/Azhenot/profile
 		.get(avatar.read_an_avatar)
 		.put(avatar.update_an_avatar)
 		.delete(avatar.delete_an_avatar);
 
-	app.route('/avatars/checkpseudo/:avatarPseudo')
+	app.route('/avatars/:avatarPseudo/checkPseudo')
+		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/checkPseudo
 		.get(avatar.check_pseudo)
 	
-	app.route('/avatars/:avatarPseudo/argent')
+	app.route('/avatars/:avatarPseudo/argent').
+		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/argent
 		.get(avatar.check_argent)
 	
 	app.route('/avatars/newuser')
