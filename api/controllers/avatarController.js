@@ -638,3 +638,40 @@ function getAllPopo(socket, pseudosocket) {
 		}
 	});
 }
+
+exports.put_argent = function(req, res){
+	var nomAvatar = req.params.avatarPseudo.toUpperCase();
+	var _argent = req.body.argent;
+	console.log(req.body.date);
+	var date = moment(req.body.date, 'DD/MM/YY HH:mm:ss', true).format();
+		console.log(date);
+
+	Avatar.findOne({'pseudo': nomAvatar}, function(err, Av) {
+		if(Av == null){
+			res.status(404).json('Pseudo introuvable');
+		}else{
+			Avatar.findOne({pseudo: nomAvatar}, function(err, Av) {
+				if(Av != null){
+					console.log('ici '+new Date(Av.dateArgent));
+					console.log('icie '+new Date(date));
+					var newDate = new Date(date);
+					console.log(moment(date).isAfter(Av.dateArgent));
+					if(moment(req.body.date, 'DD/MM/YY HH:mm:ss', true) > (moment(Av.dateArgent, 'DD/MM/YY HH:mm:ss', true))){
+						Avatar.findOneAndUpdate({pseudo: nomAvatar},
+							{$set: { dateArgent: newDate, argent: _argent }},
+								{new: true}, function(err, Ava) {	
+									res.status(202).json('Avatar '+ Ava.pseudo +' mis à jour');
+								});	
+								
+							Avatar.findOne({pseudo: nomAvatar}, function(err, AVat) {
+								console.log(AVat);
+							});
+					}else{
+						res.status(403).json('Date not up to date');
+					}
+				}
+			});
+		}
+	});	
+}
+

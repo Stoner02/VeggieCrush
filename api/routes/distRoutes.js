@@ -56,6 +56,10 @@ module.exports = function(app) {
 	app.route('/avatars/:avatarPseudo/bonus')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/bonus/?type=rts
 		.put(avatar.get_bonus)
+		
+	app.route('/avatars/:avatarPseudo/argent')
+		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/argent/
+		.put(avatar.put_argent)
 			
 		
 };
