@@ -221,6 +221,28 @@
 			"response": []
 		},
 		{
+			"name": "Get infos d'un pseudo 2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "Check si pseudo dispo",
 			"request": {
 				"method": "GET",
@@ -365,50 +387,12 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded"
+						"value": "application/json"
 					}
 				],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "potion1",
-							"value": "5",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion2",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion3",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion4",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "pseudoBuyer",
-							"value": "lolo",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "RTS",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						}
-					]
+					"mode": "raw",
+					"raw": "{\n    \"idUser\": 9,\n    \"plaque\": \"PPdPP\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/avatars/Azhenot38/connecte",
@@ -871,6 +855,50 @@
 						"avatars",
 						"newUser",
 						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Mise à jour argent",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "date",
+							"value": "12/12/19 12:12:12",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "argent",
+							"value": "50000",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/avatars/Azhenot38/argent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"Azhenot38",
+						"argent"
 					]
 				},
 				"description": ""
