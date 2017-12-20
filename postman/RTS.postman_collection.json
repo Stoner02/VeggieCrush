@@ -136,14 +136,37 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/avatars",
+					"raw": "http://localhost:3000/avatars/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"avatars"
+						"avatars",
+						"all"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get coordonnées de tous les avatars",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/avatars/coords",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"avatars",
+						"coords"
 					]
 				},
 				"description": ""
@@ -203,7 +226,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/avatars/Azhenot/profile",
+					"raw": "http://localhost:3000/avatars/Azhenot/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -212,29 +235,7 @@
 					"path": [
 						"avatars",
 						"Azhenot",
-						"profile"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get infos d'un pseudo 2",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:3000/avatars/Azhenot",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"avatars",
-						"Azhenot"
+						"all"
 					]
 				},
 				"description": ""
@@ -404,74 +405,6 @@
 						"avatars",
 						"Azhenot38",
 						"connecte"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Get coordonnées de tous les avatars",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "potion1",
-							"value": "5",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion2",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion3",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "potion4",
-							"value": "0",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "pseudoBuyer",
-							"value": "lolo",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "RTS",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/avatars/coords",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"avatars",
-						"coords"
 					]
 				},
 				"description": ""

@@ -10,17 +10,17 @@ module.exports = function(app) {
 		// EXEMPLE: http://localhost:3000/avatars/login/Azhenot38/?mdp=12345
 		.get(avatar.check_login)
 		
-	app.route('/avatars')
+	app.route('/avatars/all')
 		// EXEMPLE: http://localhost:3000/avatars
 		.get(avatar.list_all_avatars)
 		.post(avatar.create_an_avatar); //FROM SCRATCH PAS UTILISE
 
-	app.route('/avatars/:avatarId')
+	app.route('/avatars/:avatarId/all')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot
 		.get(avatar.read_an_avatar)
 		.put(avatar.update_an_avatar)
 		.delete(avatar.delete_an_avatar);
-
+		
 	app.route('/avatars/:avatarPseudo/checkPseudo')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/checkPseudo
 		.get(avatar.check_pseudo)
@@ -36,10 +36,6 @@ module.exports = function(app) {
 	app.route('/avatars/:avatarPseudo/connecte')
 		// EXEMPLE : http://localhost:3000/avatars/Azhenot38/connecte
 		.get(avatar.check_connecte)
-	
-	app.route('/avatars/coords')
-		// EXEMPLE: http://localhost:3000/avatars/coords
-		.get(avatar.get_coord)
 
 	app.route('/avatars/:avatarPseudo/potions')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/potions/?type=RTS
@@ -60,12 +56,8 @@ module.exports = function(app) {
 	app.route('/avatars/:avatarPseudo/argent')
 		// EXEMPLE: http://localhost:3000/avatars/Azhenot38/argent/
 		.put(avatar.put_argent)
-		
-	app.route('/avatars/:avatarId')
-		// EXEMPLE: http://localhost:3000/avatars/Azhenot
-		.get(avatar.read_an_avatar)
-		.put(avatar.update_an_avatar)
-		.delete(avatar.delete_an_avatar);
 			
-		
+	app.route('/avatars/coords')
+		// EXEMPLE: http://localhost:3000/avatars/coords
+		.get(avatar.get_coord)	
 };

@@ -32,13 +32,14 @@ var Prix = {
 // Find all the avatars
 //------------------------------------------
 exports.list_all_avatars = function(req, res) {
-  Avatar.find({}, function(err, Avatar) {
-    if (err){
-		res.send(err);
-	}else{
-		res.status(200).json(Avatar);
-	}
-  });
+	Avatar.find({}, function(err, Avatar) {
+		if (err){
+			res.send(err);
+		}else{
+			res.status(200).json(Avatar);
+		}
+	});
+	
 };
 
 //------------------------------------------
