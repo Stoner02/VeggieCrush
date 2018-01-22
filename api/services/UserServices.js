@@ -223,6 +223,22 @@ module.exports = {
 							console.log("Probleme de deconnexion " + socket.nickname.toUpperCase() + " dans MMO");	
 						}
 					});
+					
+					
+					// PREVENIR QU'ON QUITTE LE VILLAGE
+					request.delete('http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns/'+villagePosition+'/potions/'+socket.nickname, {
+						}, 
+						function(err,httpResponse,body){
+						if(httpResponse != null && httpResponse.statusCode == 200){
+							console.log(socket.nickname.toUpperCase() + " a quitté le village de farmvillage.");
+						}
+						else{
+							console.log("Pas dans un village ou probleme dans insertion " + socket.nickname.toUpperCase() + " dans village");	
+						}
+					});
+					
+					
+					
 					socket.disconnect(socketId);
 					
 					
