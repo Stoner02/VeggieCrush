@@ -9,15 +9,31 @@ var potionsServices = require("./PotionsServices");
 
 serverr.io.sockets.on('connection', function (socket) {
 
-    var coordSocketx = 0;
-	var coordSockety = 0;
-	var bonusHero = 0;
-	var bonusVillage1 = 0;
-	var bonusVillage2 = 0;
-	var bonusVillage3 = 0; 
-	var bonusVillage4 = 0;
-	var malusRTS = 0;
-    var connecte = false;
+
+    const public_ip_farmvillage = "193.190.248.158";
+    const masi_ip_farmvillage   = "10.113.51.26";
+
+    const public_ip_mmo         = "193.190.248.153";
+    const masi_ip_mmo           = "10.113.51.21";
+
+    const public_ip_rts         = "193.190.248.160";
+    const masi_ip_rts           = "10.113.51.28";
+
+
+    const IP_FARMVILLAGE        = public_ip_farmvillage;
+    const IP_MMO                = public_ip_mmo;
+    const IP_RTS                = public_ip_rts;
+
+
+    var coordSocketx    = 0;
+	var coordSockety    = 0;
+	var bonusHero       = 0;
+	var bonusVillage1   = 0;
+	var bonusVillage2   = 0;
+	var bonusVillage3   = 0; 
+	var bonusVillage4   = 0;
+	var malusRTS        = 0;
+    var connecte        = false;
     
 
     socket.on('inscription', function(_pseudo, _mdp) {

@@ -10,6 +10,8 @@ var moveServices    = require("./MoveServices");
 var moneyServices   = require("./MoneyServices");
 var potionsServices = require("./PotionsServices");
 
+var services 		= require("./Services");
+
 module.exports = {
 
 	//------------------------------------
@@ -21,6 +23,7 @@ module.exports = {
 		
 		var socket = _socket;
 		var pseudo = _pseudo;
+		var money = 0;
 		var mdp = _mdp;
 
 		var alreadyExist = false;
@@ -28,31 +31,31 @@ module.exports = {
 		//-------------------------------------
 		// Existence verification
 		//-------------------------------------
-		//todo si le serveur n'existe pas ça prend 20ans à passer l'instruction...
-		/*request('http://10.113.51.21:3000/users/'+ pseudo, function (error, response, body) {
+
+		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo, function (error, response, body) {
 			
 			// Déjà inscrit chez MMO 
 			if (response != null && response.statusCode == 200) {
 				alreadyExist = true;
-			}
-			request('???????????????????????/'+ pseudo, function (error, response, body) {
+			} 
+			request('http://'+ services.IP_RTS  +':3000/api/Players/'+ pseudo, function (error, response, body) {
 				// Déjà inscrit chez RTS
 				if (response.statusCode == 200) {
 					alreadyExist = true;
 				}
-				request('???????????????????????/'+ pseudo, function (error, response, body) {
+				request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
 					// Déjà inscrit chez Farmville
 					if (response.statusCode == 200) {
 						alreadyExist = true;
 					}
 				});
 			});
-			*/
+			
 			//-------------------------
 			// Ajouter dans les autres jeux
 			//-------------------------
 			if(!alreadyExist){
-				module.exports.addUserMMO(pseudo, mdp);
+				module.exports.addUserMMO(pseudo, mdp, moment().format("DD/MM/YY HH:MM:ss"), 0);
 				module.exports.addUserRPG(); 	//todo
 				module.exports.addUserVille(); //todo
 			}
@@ -61,7 +64,7 @@ module.exports = {
 				socket.emit('alreadyExist');
 			}
 			module.exports.addUser(pseudo, mdp, socket);
-		//});
+		});
 
 	},
 
@@ -89,24 +92,25 @@ module.exports = {
 				//-------------------------------------
 				// Existence verification
 				//-------------------------------------
-			/*	request('http://10.113.51.21:3000/users/'+ pseudo, function (error, response, body) {
-					// Déjà inscrit chez MMO
+				request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo, function (error, response, body) {
+			
+					// Déjà inscrit chez MMO 
 					if (response != null && response.statusCode == 200) {
 						alreadyExist = true;
 					}
-					request('???????????????????????/'+ pseudo, function (error, response, body) {
+					request('http://'+ services.IP_RTS  +':3000/api/Players/'+ pseudo, function (error, response, body) {
 						// Déjà inscrit chez RTS
 						if (response.statusCode == 200) {
 							alreadyExist = true;
 						}
-						request('???????????????????????/'+ pseudo, function (error, response, body) {
+						request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
 							// Déjà inscrit chez Farmville
 							if (response.statusCode == 200) {
 								alreadyExist = true;
 							}
 						});
 					});
-					*/
+					
 					if(alreadyExist){
 						module.exports.connectUser(pseudo, socket);
 						module.exports.addUser(pseudo, mdp, socket);
@@ -115,7 +119,7 @@ module.exports = {
 						socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
 						console.log("Erreur connexion.");
 					}
-			//	});	
+				});	
 			}else {
 				module.exports.connectUser(pseudo, socket);		
 			}
@@ -161,25 +165,23 @@ module.exports = {
 		//-------------------------------------
 		// Vérifier si connecté ailleurs
 		//-------------------------------------
-		/*
-		request('?????????????????'+ pseudo, function (error, response, body) {
+		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo + '/isConnected', function (error, response, body) {
 			// Déjà connecté chez MMO
 			if (response != null && response.statusCode == 200) {
 				alreadyCon = true;
-			}
+			}/* Pas de telle méthode pour le RTS -> ils ne font pas du temps réel.
 			request('???????????????????????/'+ pseudo, function (error, response, body) {
-				// Déjà inscrit chez RTS
+				// Déjà connecté chez RTS
+				if (response.statusCode == 200) {
+					alreadyCon = true;
+				} */
+			request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo +'/isConnected', function (error, response, body) {
+				// Déjà connecté chez Farmville
 				if (response.statusCode == 200) {
 					alreadyCon = true;
 				}
-				request('???????????????????????/'+ pseudo, function (error, response, body) {
-					// Déjà inscrit chez Farmville
-					if (response.statusCode == 200) {
-						alreadyCon = true;
-					}
-				});
 			});
-			*/
+			
 
 		if(!alreadyCon)	{
 			connecte = true;
@@ -191,6 +193,7 @@ module.exports = {
 			socket.emit("erreurConnexion", "Déjà connecté sur un autre jeu.");
 		}
 
+	});	
 		
 	},
 
@@ -252,26 +255,48 @@ module.exports = {
 	},
 
 
-	addUserMMO: function (_pseudo, _mdp){
+	addUserMMO: function (_pseudo, _mdp, _date, _money){
 
 		var pseudo = _pseudo, mdp = _mdp;
-		request.post('http://10.113.51.21:3000/users', {
-			form:{username:pseudo.toUpperCase(), password: mdp}}, function(err,httpResponse,body){
-				if(httpResponse != null && httpResponse.statusCode == 200){
-					console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
-				}
-				else{
-				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
-				}
-	});
+		request.post('http://'+ services.IP_MMO + ':3000/users', {
+			form:{
+				username:pseudo.toUpperCase(),
+				password: mdp,
+				date: _date,
+				money: _money}
+			}, 
+			function(err,httpResponse,body){
+			if(httpResponse != null && httpResponse.statusCode == 200){
+				console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
+			}
+			else{
+			console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+			}
+		});
 	},
 
 	addUserRPG: function (){
 	//todo
 	},
 
-	addUserVille: function (){
-	//todo
+	addUserVille: function (_user, _date, _argent, _faction, _passwd){
+		var pseudo = _pseudo, mdp = _mdp;
+		request.post('http://'+ services.IP_RTS + ':3000/users', {
+			form:{
+				username:_user.toUpperCase(),
+				date: _date,
+				argent: _argent,
+				faction: _faction,
+				passwd: _passwd}
+			}, 
+			function(err,httpResponse,body){
+			if(httpResponse != null && httpResponse.statusCode == 200){
+				console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
+			}
+			else{
+				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+			}
+		});
 	},
 
 	

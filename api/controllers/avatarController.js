@@ -12,21 +12,22 @@ var argentDepart 	= 1000;
 var moment 				= require('moment');
 var timezone 			= require('moment-timezone');
 
-
-var Prix = {
-	potionRTS1 : 1000,
-	potionRTS2 : 500,
-	potionRTS3 : 250,
-	potionRTS4 : 100,
-	potionMMO1 : 1000,
-	potionMMO2 : 500,
-	potionMMO3 : 250,
-	potionMMO4 : 100,
-	potionVille1 : 1000,
-	potionVille2 : 500,
-	potionVille3 : 250,
-	potionVille4 : 100
+exports.prix = {
+		potionRTS1 : 1000,
+		potionRTS2 : 500,
+		potionRTS3 : 250,
+		potionRTS4 : 100,
+		potionMMO1 : 1000,
+		potionMMO2 : 500,
+		potionMMO3 : 250,
+		potionMMO4 : 100,
+		potionVille1 : 1000,
+		potionVille2 : 500,
+		potionVille3 : 250,
+		potionVille4 : 100
 };
+
+
 
 //------------------------------------------
 // Find all the avatars

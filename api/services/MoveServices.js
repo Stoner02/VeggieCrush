@@ -1,4 +1,5 @@
 var serverr         = require('../../server');
+var avatarController= require('../controllers/avatarController');
 var Avatar          = serverr.Avatar;
 var request         = serverr.request;
 
@@ -62,14 +63,34 @@ module.exports = {
         if(village != null){
             console.log(socket.nickname + ' rentre dans le village: ' + village);
             villagePosition = village;
-            //TODO PREVENIR PAR POST QU'ON ENTRE DANS LE VILLAGE
-            /*
-            request.post({url:'https://10.113.51.26:3000/farmvillage/api/towns/'+ village +'/potions',
-                         form: {key:'value'}}, function(err,httpResponse,body){
-                 
-            })
-    
-            */
+
+            //PREVENIR PAR POST QU'ON ENTRE DANS LE VILLAGE
+            Avatar.findOne({pseudo: socket.nickname}, function(err, Av) {
+                if(Av != null){
+
+                    var headersOpt = {  
+                        "content-type": "application/json",
+                    };
+
+                    request.post({url:'http://10.113.51.26:3000/farmvillage/api/towns/'+ village +'/potions',
+                    form: {pseudo: Av.pseudo
+                            ,potion_prix4: avatarController.prix.potionVille4
+                           ,potion_prix3: avatarController.prix.potionVille3
+                           ,potion_prix2: avatarController.prix.potionVille2
+                           ,potion_prix1: avatarController.prix.potionVille1
+                           ,potion4: Av.potionVille4
+                           ,potion3: Av.potionVille3 
+                           ,potion2: Av.potionVille2
+                           ,potion1: Av.potionVille1
+                           }
+                           ,headers: headersOpt
+                           ,json: true
+                   }, function(err,httpResponse,body){
+                        console.log("message : " + httpResponse + " " + body);
+                    })
+                }
+            });
+  
         }
     },
 
@@ -77,24 +98,29 @@ module.exports = {
     // GET VILLAGES
     //----------------------------------
     emitGetVillage: function (socket){
-        //TODO RECUPERER LES VILLAGES
 
         var arrayVillage = ["Orgrimar", "Dalaran", "Fossoyeuse"];
         socket.emit("receiveVillages", {villages: arrayVillage});
-       /*
-        request('https://10.113.51.26:3000/farmvillage/api/towns', function (error, response, body) {
+       
+        request('http://10.113.51.26:3000/farmvillage/api/towns', function (error, response, body) {
             
+            //villages fictifs par défaut
+            /*
             var arrayBg = ["Tarides", "Dorotar", "MorteMine"];
+            socket.emit("receiveVillages", {bg: arrayBg});
+            */
 
             if (response != null && response.statusCode == 200) {
-                arrayBg = body.TownName;
-                console.log("les villages: " + arrayBg);
+                var arrayVillages = [];
+                var resp = JSON.parse(body);
+                for(var i = 0; i < resp.length; ++i){
+                    arrayVillages[i] = resp[i].name;
+                }
+                socket.emit("receiveVillages", {villages: arrayVillages});
             }
-
-            socket.emit("receiveBg", {bg: arrayBg});
+            
         });
-        */
-
+        
     },
 
     //----------------------------------
@@ -103,7 +129,6 @@ module.exports = {
     onUpdateBg: function (data, socket){
         var bg = data.bg;
         
-
         if(bg != null){
             console.log(socket.nickname + ' rentre dans le BG: ' + bg);
             
@@ -112,7 +137,6 @@ module.exports = {
 
             module.exports.villagePosition = "";
         }
-
         
     },
 
