@@ -56,8 +56,8 @@ module.exports = {
 			//-------------------------
 			if(!alreadyExist){
 				module.exports.addUserMMO(pseudo, mdp, moment().format("DD/MM/YY HH:MM:ss"), 0);
-				module.exports.addUserRPG(pseudo, moment().format("DD/MM/YY HH:MM:ss"), 0, mdp); 	//todo
-				//module.exports.addUserVille(); //todo
+				module.exports.addUserRPG(pseudo, moment().format("DD/MM/YY HH:MM:ss"), 0, mdp);
+				module.exports.addUserVille(pseudo, mdp, 0);
 			}
 			else{
 				console.log("L'utilisateur est déjà inscrit sur un autre jeu.");
@@ -341,26 +341,35 @@ module.exports = {
 		});
 	},
 
-	addUserVille: function (_user, _date, _argent, _faction, _passwd){
+	addUserVille: function (_user, _passwd, _argent){
 
-		var pseudo = _user;
-
-		request.post('http://'+ services.IP_RTS + ':3000/users', {
-			form:{
-				username: pseudo.toUpperCase(),
-				date: _date,
-				argent: _argent,
-				faction: _faction,
-				passwd: _passwd}
-			}, 
-			function(err,httpResponse,body){
-			if(httpResponse != null && httpResponse.statusCode == 200){
-				console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
-			}
-			else{
-				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
-			}
-		});
+		var pseudo = _user, mdp = _passwd;
+		
+				var form = {
+					username: pseudo.toUpperCase(),
+					gold: _argent,
+					password: _passwd 
+				};
+				
+				var formData = querystring.stringify(form);
+				var contentLength = formData.length;
+		
+				request({
+					headers: {
+					  'Content-Length': contentLength,
+					  'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					uri: 'http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/users',
+					body: formData,
+					method: 'POST'
+				  }, function (err, res, body) {
+					if(res != null && res.statusCode == 200){
+						console.log(pseudo.toUpperCase() + " ajouté dans FARMVILLE.");
+					}
+					else{
+						console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans FARMVILLE");	
+					}
+				  });
 	},
 
 	
