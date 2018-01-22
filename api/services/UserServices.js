@@ -31,7 +31,7 @@ module.exports = {
 		//-------------------------------------
 		// Existence verification
 		//-------------------------------------
-
+		
 		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo, function (error, response, body) {
 			
 			// Déjà inscrit chez MMO 
@@ -40,12 +40,12 @@ module.exports = {
 			} 
 			request('http://'+ services.IP_RTS  +':3000/api/Players/'+ pseudo, function (error, response, body) {
 				// Déjà inscrit chez RTS
-				if (response.statusCode == 200) {
+				if (response != null && response.statusCode == 200) {
 					alreadyExist = true;
 				}
 				request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
 					// Déjà inscrit chez Farmville
-					if (response.statusCode == 200) {
+					if (response != null && response.statusCode == 200) {
 						alreadyExist = true;
 					}
 				});
@@ -93,19 +93,18 @@ module.exports = {
 				// Existence verification
 				//-------------------------------------
 				request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo, function (error, response, body) {
-			
 					// Déjà inscrit chez MMO 
 					if (response != null && response.statusCode == 200) {
 						alreadyExist = true;
 					}
 					request('http://'+ services.IP_RTS  +':3000/api/Players/'+ pseudo, function (error, response, body) {
 						// Déjà inscrit chez RTS
-						if (response.statusCode == 200) {
+						if (response != null && response.statusCode == 200) {
 							alreadyExist = true;
 						}
 						request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
 							// Déjà inscrit chez Farmville
-							if (response.statusCode == 200) {
+							if (response != null && response.statusCode == 200) {
 								alreadyExist = true;
 							}
 						});
@@ -167,7 +166,7 @@ module.exports = {
 		//-------------------------------------
 		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo + '/isConnected', function (error, response, body) {
 			// Déjà connecté chez MMO
-			if (response != null && response.statusCode == 200) {
+			if (response != null && response.statusCode == 200 && response.connected == true) {
 				alreadyCon = true;
 			}/* Pas de telle méthode pour le RTS -> ils ne font pas du temps réel.
 			request('???????????????????????/'+ pseudo, function (error, response, body) {
@@ -177,7 +176,7 @@ module.exports = {
 				} */
 			request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo +'/isConnected', function (error, response, body) {
 				// Déjà connecté chez Farmville
-				if (response.statusCode == 200) {
+				if (response != null && response.statusCode == 200 && response.connected == true) {
 					alreadyCon = true;
 				}
 			});

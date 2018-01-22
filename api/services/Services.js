@@ -7,23 +7,29 @@ var moneyServices   = require("./MoneyServices");
 var potionsServices = require("./PotionsServices");
 
 
+const public_ip_farmvillage = "193.190.248.158";
+const masi_ip_farmvillage   = "10.113.51.26";
+
+const public_ip_mmo         = "193.190.248.153";
+const masi_ip_mmo           = "10.113.51.21";
+
+const public_ip_rts         = "193.190.248.160";
+const masi_ip_rts           = "10.113.51.28";
+
+
+module.exports.IP_FARMVILLAGE        = masi_ip_farmvillage;
+module.exports.IP_MMO                = masi_ip_mmo;
+module.exports.IP_RTS                = masi_ip_rts;
+
+/*
+module.exports = {
+    IP_FARMVILLAGE: IP_FARMVILLAGE,
+    IP_MMO: IP_MMO,
+    IP_RTS: IP_RTS
+};
+*/
+
 serverr.io.sockets.on('connection', function (socket) {
-
-
-    const public_ip_farmvillage = "193.190.248.158";
-    const masi_ip_farmvillage   = "10.113.51.26";
-
-    const public_ip_mmo         = "193.190.248.153";
-    const masi_ip_mmo           = "10.113.51.21";
-
-    const public_ip_rts         = "193.190.248.160";
-    const masi_ip_rts           = "10.113.51.28";
-
-
-    const IP_FARMVILLAGE        = public_ip_farmvillage;
-    const IP_MMO                = public_ip_mmo;
-    const IP_RTS                = public_ip_rts;
-
 
     var coordSocketx    = 0;
 	var coordSockety    = 0;
