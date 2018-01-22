@@ -3,6 +3,9 @@ var avatarController= require('../controllers/avatarController');
 var Avatar          = serverr.Avatar;
 var request         = serverr.request;
 
+var services 		= require("./Services");
+
+
 module.exports = {
 
     villagePosition:  villagePosition = "",
@@ -46,7 +49,19 @@ module.exports = {
             console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
             this.setCoord(x, y, socket);
 
-            //TODO PREVENIR MMO DU CHANGEMENT DE POSITION
+            request.post('http://'+ services.IP_MMO + ':3000/marchands/'+socket.nickname, {
+				headers:{
+					posx: x,
+					posy: y}
+				}, 
+				function(err,httpResponse,body){
+				if(httpResponse != null && httpResponse.statusCode == 200){
+					console.log(socket.nickname.toUpperCase() + " ajouté dans MMO.");
+				}
+				else{
+				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+				}
+			});
 
             //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
 
