@@ -49,6 +49,7 @@ module.exports = {
             console.log('changementPosition de ' + socket.nickname + ' en ' + x + ' ' + y);
             this.setCoord(x, y, socket);
 
+			// PREVENIR DEPLACEMENT A HOWOB
             request.post('http://'+ services.IP_MMO + ':3000/marchands/'+socket.nickname, {
 				headers:{
 					posx: x,
@@ -59,11 +60,21 @@ module.exports = {
 					console.log(socket.nickname.toUpperCase() + " ajouté dans MMO.");
 				}
 				else{
-				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+				console.log("Probleme dans insertion " + socket.nickname.toUpperCase() + " dans MMO");	
 				}
 			});
-
-            //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
+			console.log(villagePosition);
+			console.log(socket.nickname);
+			request.delete('http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns/'+villagePosition+'/potions/'+socket.nickname, {
+				}, 
+				function(err,httpResponse,body){
+				if(httpResponse != null && httpResponse.statusCode == 200){
+					console.log(socket.nickname.toUpperCase() + " a quitté le village de farmvillage.");
+				}
+				else{
+					console.log("Pas dand un village ou probleme dans insertion " + socket.nickname.toUpperCase() + " dans village");	
+				}
+			});
 
             module.exports.villagePosition = "";
         }
