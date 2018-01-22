@@ -214,10 +214,27 @@ module.exports = {
 			for (var socketId in serverr.io.sockets.sockets) {
 				var pseudo = serverr.io.sockets.sockets[socketId].nickname;
 				if(pseudo == socket.nickname){
+					
+					// PREVENIR DECONNEXION A HOWOB
+					request.delete('http://'+ services.IP_MMO + ':3000/marchands/'+socket.nickname, {}, 
+						function(err,httpResponse,body){
+						if(httpResponse != null && httpResponse.statusCode == 200){
+							console.log(socket.nickname.toUpperCase() + " Message deconnexion à MMO.");
+						}
+						else{
+							console.log("Probleme de deconnexion " + socket.nickname.toUpperCase() + " dans MMO");	
+						}
+					});
 					socket.disconnect(socketId);
+					
+					
+					
+					
 				}
 			}
 		}
+		
+		
 
 		//	socket.disconnect(0);
 	},
