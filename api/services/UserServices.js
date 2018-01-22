@@ -34,7 +34,6 @@ module.exports = {
 		//-------------------------------------
 		
 		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo, function (error, response, body) {
-			
 			// Déjà inscrit chez MMO 
 			if (response != null && response.statusCode == 200) {
 				alreadyExist = true;
@@ -44,10 +43,10 @@ module.exports = {
 				if (response != null && response.statusCode == 200) {
 					alreadyExist = true;
 				}
-				request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
+				request('http://'+ services.IP_FARMVILLAGE  +':3000/farmvillage/api/users/'+ pseudo, function (error, response, body) {
 					// Déjà inscrit chez Farmville
 					if (response != null && response.statusCode == 200) {
-						alreadyExist = true;
+						alreadyExist = true; 
 					}
 				});
 			});
@@ -57,7 +56,7 @@ module.exports = {
 			//-------------------------
 			if(!alreadyExist){
 				module.exports.addUserMMO(pseudo, mdp, moment().format("DD/MM/YY HH:MM:ss"), 0);
-				//module.exports.addUserRPG(); 	//todo
+				module.exports.addUserRPG(pseudo, moment().format("DD/MM/YY HH:MM:ss"), 0, mdp); 	//todo
 				//module.exports.addUserVille(); //todo
 			}
 			else{
@@ -103,22 +102,24 @@ module.exports = {
 						if (response != null && response.statusCode == 200) {
 							alreadyExist = true;
 						}
-						request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo, function (error, response, body) {
-							// Déjà inscrit chez Farmville
+						request('http://'+ services.IP_FARMVILLAGE  +':3000/farmvillage/api/users/'+ pseudo, function (error, response, body) {	
+						// Déjà inscrit chez Farmville
 							if (response != null && response.statusCode == 200) {
 								alreadyExist = true;
 							}
+
+							if(alreadyExist){
+								module.exports.connectUser(pseudo, socket);
+								module.exports.addUser(pseudo, mdp, socket);
+							}
+							else{
+								socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
+								console.log("Erreur connexion.");
+							}
 						});
+	
 					});
 					
-					if(alreadyExist){
-						module.exports.connectUser(pseudo, socket);
-						module.exports.addUser(pseudo, mdp, socket);
-					}
-					else{
-						socket.emit('erreurConnexion', 'Combinaison pseudo/mot de passe inconnue');
-						console.log("Erreur connexion.");
-					}
 				});	
 			}else {
 				module.exports.connectUser(pseudo, socket);		
@@ -166,33 +167,30 @@ module.exports = {
 		// Vérifier si connecté ailleurs
 		//-------------------------------------
 		request('http://'+ services.IP_MMO  +':3000/users/'+ pseudo + '/isConnected', function (error, response, body) {
-			// Déjà connecté chez MMO
-			if (response != null && response.statusCode == 200 && response.connected == true) {
+
+		// Déjà connecté chez MMO 
+			if (response != null && response.statusCode == 200 && JSON.parse(response.body).connected == true) {
 				alreadyCon = true;
-			}/* Pas de telle méthode pour le RTS -> ils ne font pas du temps réel.
-			request('???????????????????????/'+ pseudo, function (error, response, body) {
-				// Déjà connecté chez RTS
-				if (response.statusCode == 200) {
-					alreadyCon = true;
-				} */
-			request('http://'+ services.IP_FARMVILLAGE  +':3000/users/'+ pseudo +'/isConnected', function (error, response, body) {
+			}
+
+			request('http://'+ services.IP_FARMVILLAGE  +':3000/farmvillage/api/users/'+ pseudo +'/status', function (error, response, body) {
+		
 				// Déjà connecté chez Farmville
-				if (response != null && response.statusCode == 200 && response.connected == true) {
-					alreadyCon = true;
+				if (response != null && response.statusCode == 200 && JSON.parse(response.body).connected == true) {
+					alreadyCon = true; console.log("déjà coooo");
+				}
+
+				if(!alreadyCon)	{
+					connecte = true;
+					module.exports.connectionState(connecte, pseudo);
+					socket.emit('connecte');
+					console.log(pseudo + " s'est connecté");
+				}
+				else{
+					socket.emit("erreurConnexion", "Déjà connecté sur un autre jeu.");
 				}
 			});
 			
-
-		if(!alreadyCon)	{
-			connecte = true;
-			module.exports.connectionState(connecte, pseudo);
-			socket.emit('connecte');
-			console.log(pseudo + " s'est connecté");
-		}
-		else{
-			socket.emit("erreurConnexion", "Déjà connecté sur un autre jeu.");
-		}
-
 	});	
 		
 	},
@@ -307,8 +305,24 @@ module.exports = {
 
 	},
 
-	addUserRPG: function (){
-	//todo
+	addUserRPG: function (_user, _date, _argent, _passwd){
+		var pseudo = _user;
+		
+		request.post('http://'+ services.IP_RTS + ':3000/api/Players', {
+			form:{
+				user: pseudo.toUpperCase(),
+				date: _date,
+				argent: _argent,
+				passwd: _passwd}
+			}, 
+			function(err,httpResponse,body){
+			if(httpResponse != null && httpResponse.statusCode == 200){
+				console.log(pseudo.toUpperCase() + " ajouté dans RTS.");
+			}
+			else{
+				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans RTS");	
+			}
+		});
 	},
 
 	addUserVille: function (_user, _date, _argent, _faction, _passwd){
