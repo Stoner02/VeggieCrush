@@ -63,8 +63,8 @@ module.exports = {
 				console.log("Probleme dans insertion " + socket.nickname.toUpperCase() + " dans MMO");	
 				}
 			});
-			console.log(villagePosition);
-			console.log(socket.nickname);
+			
+			// PREVENIR QU'ON QUITTE LE VILLAGE
 			request.delete('http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns/'+villagePosition+'/potions/'+socket.nickname, {
 				}, 
 				function(err,httpResponse,body){
@@ -72,7 +72,7 @@ module.exports = {
 					console.log(socket.nickname.toUpperCase() + " a quitté le village de farmvillage.");
 				}
 				else{
-					console.log("Pas dand un village ou probleme dans insertion " + socket.nickname.toUpperCase() + " dans village");	
+					console.log("Pas dans un village ou probleme dans insertion " + socket.nickname.toUpperCase() + " dans village");	
 				}
 			});
 
@@ -98,7 +98,7 @@ module.exports = {
                         "content-type": "application/json",
                     };
 
-                    request.post({url:'http://10.113.51.26:3000/farmvillage/api/towns/'+ village +'/potions',
+                    request.post({url:'http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns/'+ village +'/potions',
                     form: {pseudo: Av.pseudo
                             ,potion_prix4: avatarController.prix.potionVille4
                            ,potion_prix3: avatarController.prix.potionVille3
@@ -128,7 +128,7 @@ module.exports = {
         var arrayVillage = ["Orgrimar", "Dalaran", "Fossoyeuse"];
         socket.emit("receiveVillages", {villages: arrayVillage});
        
-        request('http://10.113.51.26:3000/farmvillage/api/towns', function (error, response, body) {
+        request('http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns', function (error, response, body) {
             
             //villages fictifs par défaut
             /*
@@ -158,7 +158,19 @@ module.exports = {
         if(bg != null){
             console.log(socket.nickname + ' rentre dans le BG: ' + bg);
             
-            //TODO PREVENIR QU'ON QUITTE POUR LE VILLAGE (DELETE)
+            // PREVENIR QU'ON QUITTE LE VILLAGE
+			request.delete('http://'+ services.IP_FARMVILLAGE + ':3000/farmvillage/api/towns/'+villagePosition+'/potions/'+socket.nickname, {
+				}, 
+				function(err,httpResponse,body){
+				if(httpResponse != null && httpResponse.statusCode == 200){
+					console.log(socket.nickname.toUpperCase() + " a quitté le village de farmvillage.");
+				}
+				else{
+					console.log("Pas dans un village ou probleme dans insertion " + socket.nickname.toUpperCase() + " dans village");	
+				}
+			});
+			
+			
             //TODO: POST AU BG DIRE QU'ON EST LA
 
             module.exports.villagePosition = "";
