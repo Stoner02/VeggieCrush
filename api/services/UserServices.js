@@ -11,6 +11,7 @@ var moneyServices   = require("./MoneyServices");
 var potionsServices = require("./PotionsServices");
 
 var services 		= require("./Services");
+var querystring 	= require('querystring');
 
 module.exports = {
 
@@ -56,8 +57,8 @@ module.exports = {
 			//-------------------------
 			if(!alreadyExist){
 				module.exports.addUserMMO(pseudo, mdp, moment().format("DD/MM/YY HH:MM:ss"), 0);
-				module.exports.addUserRPG(); 	//todo
-				module.exports.addUserVille(); //todo
+				//module.exports.addUserRPG(); 	//todo
+				//module.exports.addUserVille(); //todo
 			}
 			else{
 				console.log("L'utilisateur est déjà inscrit sur un autre jeu.");
@@ -256,22 +257,37 @@ module.exports = {
 
 	addUserMMO: function (_pseudo, _mdp, _date, _money){
 
+
 		var pseudo = _pseudo, mdp = _mdp;
-		request.post('http://'+ services.IP_MMO + ':3000/users', {
-			form:{
-				username:pseudo.toUpperCase(),
-				password: mdp,
-				date: _date,
-				money: _money}
-			}, 
-			function(err,httpResponse,body){
-			if(httpResponse != null && httpResponse.statusCode == 200){
+
+		var form = {
+	
+		};
+		
+		var formData = querystring.stringify(form);
+		var contentLength = formData.length;
+
+		request({
+			headers: {
+			  'Content-Length': contentLength,
+			  'Content-Type': 'application/x-www-form-urlencoded',
+			  'username': pseudo.toUpperCase(),
+			  'password' : mdp,
+			  'date' : _date,
+			  'money' : _money
+			},
+			uri: 'http://'+ services.IP_MMO + ':3000/users',
+			body: formData,
+			method: 'POST'
+		  }, function (err, res, body) {
+			if(res != null && res.statusCode == 200){
 				console.log(pseudo.toUpperCase() + " ajouté dans MMO.");
 			}
 			else{
-			console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
+				console.log("Probleme dans insertion " + pseudo.toUpperCase() + " dans MMO");	
 			}
-		});
+		  });
+
 	},
 
 	addUserRPG: function (){
@@ -279,10 +295,12 @@ module.exports = {
 	},
 
 	addUserVille: function (_user, _date, _argent, _faction, _passwd){
-		var pseudo = _pseudo, mdp = _mdp;
+
+		var pseudo = _user;
+
 		request.post('http://'+ services.IP_RTS + ':3000/users', {
 			form:{
-				username:_user.toUpperCase(),
+				username: pseudo.toUpperCase(),
 				date: _date,
 				argent: _argent,
 				faction: _faction,
